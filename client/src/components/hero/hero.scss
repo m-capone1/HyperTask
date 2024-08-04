@@ -1,14 +1,9 @@
-@keyframes slideIn {
-    0% {
-        transform: translateY(2rem);
-    }
-    100% {
-        transform: translateY(0);
-    }
-}
+@use "../../assets/partials/mixins" as *;
+@use "../../assets/partials/variables" as *;
+@use "../../assets/partials/keyframes" as *;
 
 .hero {
-    height: 15rem;
+    height: 25rem;
     color: white;
     display: flex;
     flex-direction: column;
@@ -97,7 +92,7 @@
         animation: slideIn 2s;
         z-index: 1;
         position: relative;
-        margin-top: 3rem;
+        margin-top: 15rem;
 
         @include tablet {
             transform: translateY(3rem);

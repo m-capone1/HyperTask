@@ -1,6 +1,7 @@
 import './HomePageCard.scss';
+import Spline from '@splinetool/react-spline';
 
-export default function HomePageCard({cardNumber, title, description}) {
+export default function HomePageCard({cardNumber, title, description, scene}) {
     return (
         <section className="container">
             <div className='container__number'>
@@ -12,7 +13,10 @@ export default function HomePageCard({cardNumber, title, description}) {
             <div className='container__description'>
                 {description}
             </div>
-            <img></img>
+            <Spline 
+                scene={scene}
+                className=''
+            />
         </section>
     )
 }

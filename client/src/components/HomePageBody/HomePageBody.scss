@@ -1,12 +1,21 @@
+@use "../../assets/partials/mixins" as *;
+@use "../../assets/partials/variables" as *;
+@use "../../assets/partials/keyframes" as *;
+
 .home-page-body {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
+    padding: 0 1rem;
 
     &__header{
         font-size: 1.25rem;
         font-weight: 600;
         padding: 1rem 0;
+    }
+
+    &__subheader {
+        @extend .home-page-body__header;
     }
 }
