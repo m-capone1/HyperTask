@@ -13,6 +13,7 @@ const port = 3000;
 // Middleware
 app.use(bodyParser.json());
 
+
 // Get the directory name
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -33,7 +34,6 @@ function writeTasks(tasks) {
 }
 
 // Define OpenAI API Key and URL
-const openaiApiKey = 'sk-None-EDX5KrmoKa6GvfI1M0grT3BlbkFJ4FHaj471YfKWMyJFai8T';
 const openaiApiUrl = 'https://api.openai.com/v1/chat/completions';
 
 // Example route using OpenAI
@@ -43,7 +43,7 @@ app.post('/generate-email', async (req, res) => {
   try {
     const response = await axios.post(openaiApiUrl, {
       model: "gpt-3.5-turbo",
-      messages: [{ role: 'user', content: prompt }], // Correctly formatted messages array
+      messages: [{ role: 'user', content: prompt }],
       max_tokens: 150,
     }, {
       headers: {
@@ -54,7 +54,7 @@ app.post('/generate-email', async (req, res) => {
 
     console.log(response.data.choices[0].message.content);
 
-    res.json({ emailContent: response.data.choices[0].text });
+    res.json({ emailContent: response.data.choices[0].message.content });
   } catch (error) {
     console.error('Error generating email content:', error.response ? error.response.data : error.message);
     res.status(500).json({ error: 'Failed to generate email content. Please check API key and model.' });
