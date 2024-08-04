@@ -1,6 +1,6 @@
-@use './assets/partials/_variables' as *;
-@use './assets/partials/_mixins' as *;
-@import './assets/partials/__typography';
+@use './assets/partials/variables' as *;
+@use './assets/partials/mixins' as *;
+@import './assets/partials/typography';
 
 @import './components/header/header.scss';
 @import './components/hero/hero.scss';
@@ -28,8 +28,9 @@ body {
   font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
   font-weight: 400;
-  color:black;
+  color: white;
   font-style: normal;
+  background: rgb(2,0,36);
 }
 
 h1, h2, h3, h4, h5, h6 {

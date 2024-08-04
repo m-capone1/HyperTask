@@ -2,16 +2,13 @@
     0% {
         transform: translateY(2rem);
     }
-    50% {
-        transform: translateY(2.2rem);
-    }
     100% {
         transform: translateY(0);
     }
 }
 
 .hero {
-    height: 30rem;
+    height: 15rem;
     color: white;
     display: flex;
     flex-direction: column;
@@ -41,8 +38,6 @@
         top: 0;
         left: 0;
         width: 100%;
-        height: 100%;
-        transform: translateY(-1rem);
 
         @include tablet {
             display: none;
@@ -99,10 +94,10 @@
         background-color: $accent-color;
         cursor: pointer;
         transition: 0.25s;
-        animation: slideIn 3s;
+        animation: slideIn 2s;
         z-index: 1;
         position: relative;
-        transform: translateY(1rem);
+        margin-top: 3rem;
 
         @include tablet {
             transform: translateY(3rem);

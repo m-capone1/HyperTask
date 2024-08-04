@@ -1,10 +1,19 @@
 import Spline from '@splinetool/react-spline';
+import { useNavigate
 
+ } from 'react-router-dom';
 export default function Hero() {
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate("/get-started");
+    }
+
+
     return (
     <section className="hero">
         <div className='hero__spline-container'>
-            <Spline 
+            {/* <Spline 
                 scene="https://prod.spline.design/VkPjpx10KGDwYHeP/scene.splinecode"
                 className='hero__spline-canvas'
             />
@@ -15,8 +24,8 @@ export default function Hero() {
             <Spline 
                 scene="https://prod.spline.design/aVTjrKz6Pv0S3NbJ/scene.splinecode"
                 className='hero__spline-canvas-desktop'
-            />
-            <button className="hero__button">Get Started</button>
+            /> */}
+            <button onClick={handleClick} className="hero__button">Get Started</button>
         </div>
     </section>
     );
