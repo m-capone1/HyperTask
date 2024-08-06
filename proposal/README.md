@@ -66,29 +66,22 @@ Project Details Page - There will be another page that users can navigate to for
 ### Mockups
 
 #### Home Page
-![Home Page](homepage.png)
-![Home Page 2](homepage-2.png)
+ ![](home.png)
 
 #### Register Page
-![Register Page](signup.png)
+![](home.png)
 
 #### Login Page
-![Login Page](login.png)
+![](home.png)
 
 #### Board Page
-![Board Page](board-page.png)
+![](home.png)
 
 #### Details Page
-![Details Page](detailsPage.png)
-![Details Page 2](detailsPage-2.png)
-
-#### User Flow
-![User Flow](userflow.png)
-
-#### SQL Flow
-![SQL Flow](userflow.png)
+![](home.png)
 
 ### Data
+![](sql-flow.png)
 
 The user login data will be stored in a 'users' table with mySQL/knex. HyperTask will also store the project id in the table which will point to whichever users have access. HyperTask will utilize the Open AI API and store the returned prompts/cards in the database.
 
