@@ -6,7 +6,6 @@ import BoardPage from './pages/BoardPage/BoardPage'
 import Footer from './components/Footer/Footer';
 import Header from './components/header/header';
 
-
 function App() {
   return (
     <>
