@@ -86,7 +86,7 @@ Project Details Page - There will be another page that users can navigate to for
 ![User Flow](userflow.png)
 
 #### SQL Flow
-![SQL Flow](userflow.png)
+![SQL Flow](sql-flow.png)
 
 ### Data
 
