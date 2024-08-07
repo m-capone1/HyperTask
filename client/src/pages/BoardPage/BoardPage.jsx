@@ -1,9 +1,30 @@
-export default function BoardPage(){
-    
-    
-    return (<div>
-        board page
-    </div>)
+import { useState, useEffect } from "react";
+import axios from 'axios';
+import { useParams } from "react-router-dom";
+
+export default function BoardPage() {
+    let baseUrl = 'http://localhost:8080/project';
+
+    const [project, setProject] = useState({});
+    let { id } = useParams();
+
+    useEffect(() => {
+        const fetchProject = async () => {
+            try {
+                const response = await axios.get(`${baseUrl}/${id}`);
+                setProject(response.data);
+            } catch (error) {
+                console.error("Error fetching project data:", error);
+            }
+        }
+        fetchProject();
+    }, []);
+
+    return (
+        <div>
+            {typeof project != "undefined" ? project.name : "Loading..."}
+        </div>
+    );
 }
 
 //to do:
