@@ -20,7 +20,6 @@ export default function Header() {
                     <span>Resources</span>
                     <span>Get Started</span>
                 </div>
-                <img className='header__more' src={MoreIcon} alt='more-icon'></img>
         </header>
     );
 }

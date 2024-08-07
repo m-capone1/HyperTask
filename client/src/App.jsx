@@ -5,6 +5,7 @@ import GetStartedPage from './pages/GetStartedPage/GetStartedPage'
 import BoardPage from './pages/BoardPage/BoardPage'
 import Footer from './components/Footer/Footer';
 import Header from './components/header/header';
+import ProjectDetails from './pages/ProjectDetails/ProjectDetails';
 
 function App() {
   return (
@@ -14,7 +15,9 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />}/>
           <Route path='/get-started' element={<GetStartedPage />} />
+          <Route path ='/login' element={<LoginPage />} /> 
           <Route path='/board' element={<BoardPage />} />
+          <Route path ='/project-details' element={<ProjectDetails />} />
         </Routes>
       </BrowserRouter>
       <Footer />

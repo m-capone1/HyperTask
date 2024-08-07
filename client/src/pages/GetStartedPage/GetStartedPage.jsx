@@ -8,7 +8,7 @@ export default function GetStarted(){
         e.preventDefault();
         navigate('/board');
     }
-    return(
+    return (
         <section className="get-started">
             <h1 className="get-started__header">Get Started.</h1>
             <form onSubmit={handleSubmit} className='get-started__form'>
