@@ -5,6 +5,11 @@ const router = express.Router();
 
 router
     .route('/')
-    .get(projectController.list)
+    .get(projectController.projectsList)
+    .post(projectController.createProject);
+
+router
+    .route('/:id')
+    .get(projectController.singleProject)
 
 export default router;
