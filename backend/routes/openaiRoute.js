@@ -1,16 +1,30 @@
 import express from 'express';
-import { generateContent } from './openaiService.js';
+import axios from 'axios';
 
 const router = express.Router();
 
-router.post('/project/:id', async (req, res) => {
+const openaiApiKey = process.env.OPENAI_API_KEY; // Use environment variable
+const openaiApiUrl = 'https://api.openai.com/v1/chat/completions';
+
+router.post('/generate', async (req, res) => {
   const prompt = JSON.stringify(req.body);
 
   try {
-    const content = await generateContent(prompt);
-    res.json(content);
+    const response = await axios.post(openaiApiUrl, {
+      model: "gpt-3.5-turbo",
+      messages: [{ role: 'user', content: prompt }],
+      max_tokens: 250,
+    }, {
+      headers: {
+        'Authorization': `Bearer ${openaiApiKey}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    res.json(response.data.choices[0].message.content);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Error generating content:', error.response ? error.response.data : error.message);
+    res.status(500).json({ error: 'Failed to generate content. Please check API key and model.' });
   }
 });
 
