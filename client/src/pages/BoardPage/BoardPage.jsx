@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from 'axios';
 import { useParams } from "react-router-dom";
 import './BoardPage.scss';
+import Card from "../../components/Card/Card.jsx";
 
 export default function BoardPage() {
     let baseUrl = 'http://localhost:8080';
@@ -50,9 +51,8 @@ export default function BoardPage() {
                     <div className="board__header">
                         To Do
                     </div>
-                    <div className="board__column-cards"></div>
-                    <div className="board__card">
-                        hi
+                    <div className="board__column-cards">
+                        <Card />
                     </div>
                 </div>
                 <div className="board__column">
