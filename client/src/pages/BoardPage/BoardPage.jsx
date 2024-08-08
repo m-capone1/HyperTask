@@ -1,29 +1,85 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
 import { useParams } from "react-router-dom";
+import './BoardPage.scss';
 
 export default function BoardPage() {
-    let baseUrl = 'http://localhost:8080/project';
+    let baseUrl = 'http://localhost:8080';
 
     const [project, setProject] = useState({});
+    const [cards, setCards] = useState([]);
+    const [cardPosition, setCardPosition] = useState({x : 0, y: 0});
+
     let { id } = useParams();
 
     useEffect(() => {
         const fetchProject = async () => {
             try {
-                const response = await axios.get(`${baseUrl}/${id}`);
+                const response = await axios.get(`${baseUrl}/project/${id}`);
                 setProject(response.data);
             } catch (error) {
                 console.error("Error fetching project data:", error);
             }
         }
         fetchProject();
-    }, []);
 
+        const fetchCards = async () => {
+            try {
+                const response = await axios.get(`${baseUrl}/card/cards/${id}`);
+                setCards(response.data);
+            } catch (error) {
+                console.error("Error fetching project data:", error);
+            }
+        }
+        fetchCards();
+    }, [id]);
+
+    if (typeof project === "undefined" || cards.length === 0) {
+        return <div>Loading...</div>
+    }
+
+    console.log(project);
     return (
-        <div>
-            {typeof project != "undefined" ? project.name : "Loading..."}
-        </div>
+        <section className="board">
+            <div className="board__details">
+                <h1 className="board__name">{project.name}</h1>
+                <div>{project.user_id}</div>
+            </div>
+            <section className="board__kanban">
+                <div className="board__column">
+                    <div className="board__header">
+                        To Do
+                    </div>
+                    <div className="board__column-cards"></div>
+                    <div className="board__card">
+                        hi
+                    </div>
+                </div>
+                <div className="board__column">
+                    <div className="board__header">
+                        In Progress
+                    </div>
+                    <div className="board__column-cards"></div>
+                </div>
+                <div className="board__column">
+                    <div className="board__header">
+                        In Review
+                    </div>
+                    <div className="board__column-cards"></div>
+                </div>
+                <div className="board__column">
+                    <div className="board__header">
+                        Completed
+                    </div>
+                    <div className="board__column-cards"></div>
+                </div>
+            </section>
+            <div>
+                {/* {cards.map((card) => (
+                    <div key={card.id}>{card.title}</div>
+                ))} */}
+            </div>
+        </section>
     );
 }
 
@@ -33,8 +89,3 @@ export default function BoardPage() {
 //add the cards to the board to 'get user started' 
 //add button to add more cards (user can add cards manually or through a open ai prompt)
 //add button to summarize project in a short report, metrics, etc.
-
-//todo on another page:
-//automated scheduling (meetings, deadline predictions)
-//email creation
-//automated 

@@ -2,7 +2,7 @@ import initKnex from "knex";
 import configuration from "../knexfile.js";
 const knex = initKnex(configuration);
 
-const cardList = async (req, res) => {
+const allCardList = async (req, res) => {
   try {
     const data = await knex("card");
     res.status(200).json(data);
@@ -47,4 +47,24 @@ const createCard = async (req, res) => {
   }
 }
 
-export { cardList, singleCard, createCard };
+const cardsByProjectId = async (req, res) => {
+  try {
+    const projectId = parseInt(req.params.projectId, 10); // Ensure it's a number
+    if (isNaN(projectId)) {
+      return res.status(400).json({ message: "Invalid project ID" });
+    }
+
+    const data = await knex("card").where({ project_id: projectId });
+
+    if (data.length === 0) {
+      return res.status(404).json({ message: `No cards found for project ID ${projectId}` });
+    }
+
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(500).send(`Error retrieving card data: ${err}`);
+  }
+};
+
+
+export { allCardList, singleCard, createCard, cardsByProjectId };
