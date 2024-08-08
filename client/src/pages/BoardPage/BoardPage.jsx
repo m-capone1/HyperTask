@@ -9,8 +9,8 @@ export default function BoardPage() {
 
     const [project, setProject] = useState({});
     const [cards, setCards] = useState([]);
-    const [cardPosition, setCardPosition] = useState({x : 0, y: 0});
-
+    const [currentCardPos, setCurrentCardPos] = useState({x:0, y:0});
+    
     let { id } = useParams();
 
     useEffect(() => {
@@ -39,7 +39,6 @@ export default function BoardPage() {
         return <div>Loading...</div>
     }
 
-    console.log(project);
     return (
         <section className="board">
             <div className="board__details">

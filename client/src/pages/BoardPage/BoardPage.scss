@@ -29,8 +29,8 @@
     }
 
     &__kanban {
-        display: flex;
-        flex-direction: row;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
         width: 100%;
         padding: 1rem;
     }
@@ -38,7 +38,7 @@
     &__column {
         display: flex;
         flex-direction: column;
-        width: 25%;
+        width: 100%;
         align-items: center;
     }
 
