@@ -2,15 +2,6 @@ import initKnex from "knex";
 import configuration from "../knexfile.js";
 const knex = initKnex(configuration);
 
-const allCardList = async (req, res) => {
-  try {
-    const data = await knex("card");
-    res.status(200).json(data);
-  } catch (err) {
-    res.status(400).send(`Error retrieving card data: ${err}`);
-  }
-};
-
 const singleCard = async (req, res) => {
   try {
     const cardData = await knex.select("*").from("card").where({ id: req.params.id });
@@ -49,7 +40,7 @@ const createCard = async (req, res) => {
 
 const cardsByProjectId = async (req, res) => {
   try {
-    const projectId = parseInt(req.params.projectId, 10); // Ensure it's a number
+    const projectId = parseInt(req.params.projectId, 10);
     if (isNaN(projectId)) {
       return res.status(400).json({ message: "Invalid project ID" });
     }
@@ -66,5 +57,41 @@ const cardsByProjectId = async (req, res) => {
   }
 };
 
+const toDoCardList = async (req, res) => {
+  try {
+    const data = await knex.select("*").from("card").where({ category: 'To Do' });
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(400).send(`Error retrieving card data: ${err}`);
+  }
+};
 
-export { allCardList, singleCard, createCard, cardsByProjectId };
+const inProgCardList = async (req, res) => {
+  try {
+    const data = await knex.select("*").from("card").where({ category: 'In Progress' });
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(400).send(`Error retrieving card data: ${err}`);
+  }
+};
+
+const inRevCardList = async (req, res) => {
+  try {
+    const data = await knex.select("*").from("card").where({ category: 'In Review' });
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(400).send(`Error retrieving card data: ${err}`);
+  }
+};
+
+const completedCardList = async (req, res) => {
+  try {
+    const data = await knex.select("*").from("card").where({ category: 'Completed' });
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(400).send(`Error retrieving card data: ${err}`);
+  }
+};
+
+
+export { singleCard, createCard, cardsByProjectId, toDoCardList, inProgCardList, inRevCardList, completedCardList };
