@@ -66,11 +66,7 @@ export default function BoardPage() {
       const toContainer = over.id;
   
       let movedCard;
-  
-      console.log('Dragging from:', fromContainer);
-      console.log('Dragging to:', toContainer);
-  
-      // Remove the card from the appropriate container
+
       if (fromContainer === "To Do") {
         setToDo(prevCards => {
             const updatedCards = [...prevCards];
@@ -100,10 +96,11 @@ export default function BoardPage() {
           return updatedCards;
         });
       }
-  
+      console.log(`to: ${toContainer}, from: ${fromContainer}`);
       console.log('Moved card:', movedCard);
+
+      movedCard.category = toContainer;
   
-      // Add the card to the new container
       if (toContainer === "To Do") {
         setToDo(prevCards => [...prevCards, movedCard]);
       } else if (toContainer === "In Progress") {
@@ -113,6 +110,25 @@ export default function BoardPage() {
       } else if (toContainer === "Completed") {
         setCompleted(prevCards => [...prevCards, movedCard]);
       }
+
+      const updateDatabase = async() => {
+        try {
+            console.log(movedCard);
+            let movedCardId = movedCard.id;
+            let cardToUpdate = {
+                project_id: movedCard.project_id,
+                id : movedCard.id,
+                category: movedCard.category,
+                title: movedCard.title,
+                description: movedCard.description
+            }
+            const response = await axios.put(`${baseUrl}/card/${movedCardId}`, cardToUpdate)
+        } catch(e) {
+            console.log("Error with put request", e);
+        }
+    }
+
+      updateDatabase();
     }
   }
    

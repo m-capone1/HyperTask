@@ -9,7 +9,8 @@ router
 
 router
     .route('/:id')
-    .get(cardController.singleCard);
+    .get(cardController.singleCard)
+    .put(cardController.updateCard);
 
 router
     .route('/cards/:projectId')
@@ -18,7 +19,6 @@ router
 router 
     .route('/:projectId/todo')
     .get(cardController.toDoCardList)
-    .put(cardController.updatedToDoCardList)
 
 router 
     .route('/:projectId/inprogress')

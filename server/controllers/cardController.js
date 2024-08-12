@@ -93,9 +93,9 @@ const completedCardList = async (req, res) => {
   }
 };
 
-const updatedToDoCardList = async (req, res) => {
+const updateCard= async (req, res) => {
   try{
-    const rowsUpdated = await knex("cards").where({ id: req.params.id }).update(req.body);
+    const rowsUpdated = await knex("card").where({ id: req.params.id }).update(req.body);
 
     if (rowsUpdated === 0) {
       return res.status(404).json({
@@ -114,4 +114,4 @@ const updatedToDoCardList = async (req, res) => {
 }
 
 
-export { singleCard, createCard, cardsByProjectId, toDoCardList, inProgCardList, inRevCardList, completedCardList, updatedToDoCardList };
+export { singleCard, createCard, cardsByProjectId, toDoCardList, inProgCardList, inRevCardList, completedCardList, updateCard };
