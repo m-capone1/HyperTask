@@ -1,4 +1,4 @@
-import Draggable from 'react-draggable';
+import {useDraggable} from '@dnd-kit/core';
 import { useRef, useState, useEffect } from 'react';
 import './Card.scss';
 
@@ -58,15 +58,10 @@ export default function Card({ toDoPos, inProgPos, inRevPos, comPos, title, desc
     };
 
     return (
-        <Draggable
-            nodeRef={nodeRef}
-            grid={[200,0]}
-            position={position}
-            onStop={handleStop}
-        >
+        <div>
             <div ref={nodeRef} className='card'>
                 {title}
             </div>
-        </Draggable>
+        </div>
     );
 }

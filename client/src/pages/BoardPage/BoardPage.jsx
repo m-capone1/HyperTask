@@ -1,8 +1,12 @@
 import { useState, useEffect, useRef } from "react";
+import {DndContext} from '@dnd-kit/core';
+import Droppable from './Draggable.jsx';
+import Draggable from "./Draggable.jsx";
 import axios from 'axios';
 import { useParams } from "react-router-dom";
 import './BoardPage.scss';
 import Card from "../../components/Card/Card.jsx";
+import Column from "../../components/Column/Column.jsx";
 
 export default function BoardPage() {
     let baseUrl = 'http://localhost:8080';
@@ -94,12 +98,6 @@ export default function BoardPage() {
         fetchCompletedCards();
     }, [cards])
 
-    // console.log(cards);
-    // console.log(toDoCards);
-    // console.log(inRevCards);
-    // console.log(inProgCards);
-    // console.log(completedCards);
-
     useEffect(() => {
         const calculateBounds = () => {
             if(parentRef1.current && parentRef2.current && parentRef3.current && parentRef4.current){
@@ -123,6 +121,11 @@ export default function BoardPage() {
 
     }, [cards]);
 
+    const handleDrag = (event) => {
+        const {over} = event;
+        setParent(over ? over.id : null);
+    }
+
     if (typeof project === "undefined" || cards.length === 0) {
         return <div>Loading...</div>
     }
@@ -133,89 +136,53 @@ export default function BoardPage() {
                 <h1 className="board__name">{project.name}</h1>
                 <div>{project.user_id}</div>
             </div>
-            <section className="board__kanban">
-                <div className="board__column" ref={parentRef1}>
-                    <div className="board__header">
-                        To Do
-                    </div>
-                    <div className="board__column-cards">
-                        {
-                            toDoCards.map((card)=>(
-                                <div key={card.id}>
-                                    <Card 
-                                        toDoPos={columns.toDo.bounds}
-                                        inProgPos={columns.inProgress.bounds}
-                                        inRevPos={columns.inReview.bounds}
-                                        comPos={columns.completed.bounds} 
-                                        title ={card.title} 
-                                        description={card.description}
-                                    />
-                                </div>
-                            ))
-                        }
-                    </div>
-                </div>
-                <div className="board__column" ref={parentRef2}>
-                    <div className="board__header">
-                        In Progress
-                    </div>
-                    <div className="board__column-cards">
-                        {
-                            inProgCards.map((card)=>(
-                                <div key={card.id}>
-                                    <Card 
-                                        toDoPos={columns.toDo.bounds}
-                                        inProgPos={columns.inProgress.bounds}
-                                        inRevPos={columns.inReview.bounds}
-                                        comPos={columns.completed.bounds} 
-                                        title ={card.title} 
-                                        description={card.description}/>
-                                </div>
-                            ))
-                        }
-                    </div>
-                </div>
-                <div className="board__column" ref={parentRef3}>
-                    <div className="board__header">
-                        In Review
-                    </div>
-                    <div className="board__column-cards">
-                        {
-                           inRevCards.map((card)=>(
-                                <div key={card.id}>
-                                    <Card 
-                                        toDoPos={columns.toDo.bounds}
-                                        inProgPos={columns.inProgress.bounds}
-                                        inRevPos={columns.inReview.bounds}
-                                        comPos={columns.completed.bounds}
-                                        title ={card.title} 
-                                        description ={card.description}/>
-                                </div>
-                            ))
-                        }
-                    </div>
-                </div>
-                <div className="board__column" ref={parentRef4}>
-                    <div className="board__header">
-                        Completed
-                    </div>
-                    <div className="board__column-cards">
-                        {
-                           completedCards.map((card)=>(
-                                <div key={card.id}>
-                                    <Card 
-                                        toDoPos={columns.toDo.bounds}
-                                        inProgPos={columns.inProgress.bounds}
-                                        inRevPos={columns.inReview.bounds}
-                                        comPos={columns.completed.bounds} 
-                                        title ={card.title} 
-                                        description={card.description}/>
-                                </div>
-                            ))
-                        }
-                    </div>
-                </div>
-            </section>
+            <DndContext onDragEnd={handleDrag}>
+                <section className="board__kanban">
+                    <Droppable id="todo" className="board__column">
+                        <div className="board__header">To Do</div>
+                        <div className="board__column-cards">
+                            {toDoCards.map(card => (
+                                <Draggable key={card.id} id={card.id}>
+                                    <Card title={card.title} description={card.description} />
+                                </Draggable>
+                            ))}
+                        </div>
+                    </Droppable>
+
+                    <Droppable id="inprogress" className="board__column">
+                        <div className="board__header">In Progress</div>
+                        <div className="board__column-cards">
+                            {inProgCards.map(card => (
+                                <Draggable key={card.id} id={card.id}>
+                                    <Card title={card.title} description={card.description} />
+                                </Draggable>
+                            ))}
+                        </div>
+                    </Droppable>
+
+                    <Droppable id="inreview" className="board__column">
+                        <div className="board__header">In Review</div>
+                        <div className="board__column-cards">
+                            {inRevCards.map(card => (
+                                <Draggable key={card.id} id={card.id}>
+                                    <Card title={card.title} description={card.description} />
+                                </Draggable>
+                            ))}
+                        </div>
+                    </Droppable>
+
+                    <Droppable id="completed" className="board__column">
+                        <div className="board__header">Completed</div>
+                        <div className="board__column-cards">
+                            {completedCards.map(card => (
+                                <Draggable key={card.id} id={card.id}>
+                                    <Card title={card.title} description={card.description} />
+                                </Draggable>
+                            ))}
+                        </div>
+                    </Droppable>
+                </section>
+            </DndContext>
         </section>
     );
 }
