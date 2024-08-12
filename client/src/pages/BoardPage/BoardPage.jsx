@@ -142,7 +142,14 @@ export default function BoardPage() {
                         {
                             toDoCards.map((card)=>(
                                 <div key={card.id}>
-                                    <Card parentPos={columns.toDo.bounds} title ={card.title} description ={card.description}/>
+                                    <Card 
+                                        toDoPos={columns.toDo.bounds}
+                                        inProgPos={columns.inProgress.bounds}
+                                        inRevPos={columns.inReview.bounds}
+                                        comPos={columns.completed.bounds} 
+                                        title ={card.title} 
+                                        description={card.description}
+                                    />
                                 </div>
                             ))
                         }
@@ -156,7 +163,13 @@ export default function BoardPage() {
                         {
                             inProgCards.map((card)=>(
                                 <div key={card.id}>
-                                    <Card parentPos={columns.inProgress.bounds} title ={card.title} description ={card.description}/>
+                                    <Card 
+                                        toDoPos={columns.toDo.bounds}
+                                        inProgPos={columns.inProgress.bounds}
+                                        inRevPos={columns.inReview.bounds}
+                                        comPos={columns.completed.bounds} 
+                                        title ={card.title} 
+                                        description={card.description}/>
                                 </div>
                             ))
                         }
@@ -170,7 +183,13 @@ export default function BoardPage() {
                         {
                            inRevCards.map((card)=>(
                                 <div key={card.id}>
-                                    <Card parentPos={columns.inReview.bounds} title ={card.title} description ={card.description}/>
+                                    <Card 
+                                        toDoPos={columns.toDo.bounds}
+                                        inProgPos={columns.inProgress.bounds}
+                                        inRevPos={columns.inReview.bounds}
+                                        comPos={columns.completed.bounds}
+                                        title ={card.title} 
+                                        description ={card.description}/>
                                 </div>
                             ))
                         }
@@ -184,7 +203,13 @@ export default function BoardPage() {
                         {
                            completedCards.map((card)=>(
                                 <div key={card.id}>
-                                    <Card parentPos={columns.completed.bounds} title ={card.title} description ={card.description}/>
+                                    <Card 
+                                        toDoPos={columns.toDo.bounds}
+                                        inProgPos={columns.inProgress.bounds}
+                                        inRevPos={columns.inReview.bounds}
+                                        comPos={columns.completed.bounds} 
+                                        title ={card.title} 
+                                        description={card.description}/>
                                 </div>
                             ))
                         }

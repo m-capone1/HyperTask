@@ -1,37 +1,72 @@
 import Draggable from 'react-draggable';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import './Card.scss';
 
-export default function Card({parentPos, title, description}) {
+export default function Card({ toDoPos, inProgPos, inRevPos, comPos, title, description, onSnap }) {
     const nodeRef = useRef(null);
-    // console.log(parentPos);
+    const [position, setPosition] = useState({ x: 0, y: 0 });
 
-    const [cardPos, setCardPos]= useState({x: 0, y: 0});
+    const getClosestColumn = (x) => {
+        const columns = [
+            { name: 'toDo', bounds: toDoPos },
+            { name: 'inProgress', bounds: inProgPos },
+            { name: 'inReview', bounds: inRevPos },
+            { name: 'completed', bounds: comPos }
+        ];
 
-    const handleStop = () => {
-        if (nodeRef.current) {
-            let rect=nodeRef.current.getBoundingClientRect();
-            let xPos=rect.x;
-            let yPos=rect.y;
-            setCardPos({xPos, yPos});
+        const centerPoints = columns.map(col => ({
+            name: col.name,
+            center: (col.bounds.left + col.bounds.right) / 2
+        }));
+
+        let closestColumn = centerPoints[0];
+        let minDistance = Math.abs(x - closestColumn.center);
+
+        centerPoints.forEach(col => {
+            const distance = Math.abs(x - col.center);
+            if (distance < minDistance) {
+                closestColumn = col;
+                minDistance = distance;
+            }
+        });
+
+        return closestColumn;
+    };
+
+    const handleStop = (e, data) => {
+        const closestColumn = getClosestColumn(data.x);
+
+        let newPositionX = position.x;
+        let newPositionY = data.y; // Maintain the current vertical position
+
+        if (closestColumn.name === 'toDo') {
+            newPositionX = toDoPos.left;
+        } else if (closestColumn.name === 'inProgress') {
+            newPositionX = inProgPos.left;
+        } else if (closestColumn.name === 'inReview') {
+            newPositionX = inRevPos.left;
+        } else if (closestColumn.name === 'completed') {
+            newPositionX = comPos.left;
         }
-        //now evaluate the position to see which column it is closest to
-        //then snap into place of the correct column
 
-        if(cardPos.xPos > 0 && cardPos.xPos < 100){
-            console.log('within zone');
+        // Update position to snap into place
+        setPosition({ x: newPositionX, y: newPositionY });
+
+        if (onSnap) {
+            onSnap({ title, newPositionX, newPositionY });
         }
-    }
-
-    // console.log(cardPos);
+    };
 
     return (
-        <Draggable 
-        nodeRef={nodeRef} 
-        defaultPosition = {{x: 0, y: 0 }}
-        onStop={handleStop}
+        <Draggable
+            nodeRef={nodeRef}
+            grid={[200,0]}
+            position={position}
+            onStop={handleStop}
         >
-            <div ref = {nodeRef} className='card'>{title}</div>
+            <div ref={nodeRef} className='card'>
+                {title}
+            </div>
         </Draggable>
-    )
+    );
 }
