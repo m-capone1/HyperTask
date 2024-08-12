@@ -93,5 +93,25 @@ const completedCardList = async (req, res) => {
   }
 };
 
+const updatedToDoCardList = async (req, res) => {
+  try{
+    const rowsUpdated = await knex("cards").where({ id: req.params.id }).update(req.body);
 
-export { singleCard, createCard, cardsByProjectId, toDoCardList, inProgCardList, inRevCardList, completedCardList };
+    if (rowsUpdated === 0) {
+      return res.status(404).json({
+        message: `Card with ID ${req.params.id} not found`,
+      });
+    }
+
+    const updatedCard = await knex("card").where({ id: req.params.id });
+
+    res.status(200).json(updatedCard[0]);
+  } catch (error) {
+    res.status(500).json({
+      message: `Unable to update inventory item with ID ${req.params.id}: ${error}`,
+    });
+  }
+}
+
+
+export { singleCard, createCard, cardsByProjectId, toDoCardList, inProgCardList, inRevCardList, completedCardList, updatedToDoCardList };

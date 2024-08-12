@@ -18,6 +18,7 @@ router
 router 
     .route('/:projectId/todo')
     .get(cardController.toDoCardList)
+    .put(cardController.updatedToDoCardList)
 
 router 
     .route('/:projectId/inprogress')
@@ -26,6 +27,7 @@ router
 router 
     .route('/:projectId/inreview')
     .get(cardController.inRevCardList)
+
 
 router 
     .route('/:projectId/completed')
