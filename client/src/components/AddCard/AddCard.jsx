@@ -6,16 +6,19 @@ import Modal from 'react-modal';
 
 const customStyles = {
     content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
+    //   top: '10%',
+      left: '15%',
+    //   right: 'auto',
+    //   bottom: 'auto',
+    //   marginRight: '-50%',
+    //   transform: 'translate(-10%, -10%)',
+        width: '70%',
+        backgroundColor: 'blue',
+        borderRadius: '1rem'
     },
   };
 
-const AddCard = () => {
+const AddCard = ({category}) => {
     const [isHovered, setIsHovered] = useState(false);
 
     let subtitle;
@@ -31,10 +34,11 @@ const AddCard = () => {
     }
 
     function closeModal() {
-    setIsOpen(false);
+        setIsOpen(false);
+        setIsHovered(false);
     }
-
-    const handleClick = () =>{ 
+    
+    function handleAddCard() {
 
     }
 
@@ -55,12 +59,26 @@ const AddCard = () => {
                     ariaHideApp={false}
                     contentLabel="Example Modal"
                 >
-                    <div>                      
-                        <h2 ref={(_subtitle) => (subtitle = _subtitle)}>Add a Card</h2>
-                        <div>
-                            
+                    <div className='modal-container'>                      
+                        <div className='modal'>
+                            <form className='modal__form'>
+                                <div className='modal__title-container'>
+                                    <label htmlFor='title' className='modal__title'>Title</label>
+                                    <div className='modal__category'>Category: {category}</div>
+                                </div>
+                                <input id='title' name='title' className='modal__input'></input>
+                            </form>
                         </div>
-                        <button onClick={closeModal}>close</button>
+                        <div className='modal'>
+                            <form className='modal__form'>
+                                <label htmlFor='description' className='modal__description'>Description</label>
+                                <textarea type="text" name='description' id="description" className='modal__textarea'></textarea>
+                            </form> 
+                        </div>
+                        <div className='modal__buttons'>
+                            <button onClick={handleAddCard} className='modal__button'>+ Add Card</button>
+                            <button onClick={closeModal} className='modal__button'>Close</button>
+                        </div>
                     </div>
                 </Modal>
                 </div>

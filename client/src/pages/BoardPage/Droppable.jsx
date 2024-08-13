@@ -10,15 +10,15 @@ export function Droppable(props) {
   const style = {
     color: isOver ? 'pink' : undefined,
   };
-  
+
+  let category = props.children[0].props.children;
+
   return (
     <div ref={setNodeRef} className="droppable" style={style}>
-      <div>
-        <h3>{props.container}</h3>
-        {props.children}
-      </div>
+      <h3 className='droppable__header'>{props.container}</h3>
+      {props.children}
       <div className='droppable__modal'>
-        <AddCard />
+        <AddCard category={category}/>
       </div>
     </div>
   );

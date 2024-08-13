@@ -19,5 +19,82 @@
 .modal-button {
     font-family: 'Montserrat', sans-serif;
     border: none;
-    font-size: 1rem;;
+    font-size: 1rem;
+}
+
+.modal-container{
+    background-color: $background;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal {
+    display: flex;
+    flex-direction: column;
+
+    &__title-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+    }
+
+    &__title {
+        font-size: 1.5rem;
+    }
+
+    &__input {
+        height: 3rem;
+        border-radius: 0.5rem;
+        border: none;
+        outline:none;
+        font-family: 'Montserrat', sans-serif;
+        padding-left: 0.5rem;
+    }
+
+    &__description {
+        font-size: 1.5rem;
+        padding: 0.5rem 0;
+    }
+
+    &__textarea {
+        height: 6rem;
+        border-radius: 0.5rem;
+        border: none;
+        outline:none;
+        resize: none;
+        font-family: 'Montserrat', sans-serif;
+        padding: 0.5rem 0 0 0.5rem;
+    }
+
+    &__category {
+        font-size: 0.875rem;
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        margin: 1rem 1rem;
+    }
+
+    &__buttons {
+        display: flex;
+        align-self: center;
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    &__button {
+        height: 2.5rem;
+        background-color: $tertiary-accent-color;
+        font-family: 'Montserrat', sans-serif;
+        border-radius: 2rem;
+        color: $secondary-text;
+        font-weight: 600;
+        padding: 0 1rem;
+        border: none;
+        box-shadow: 0 0 10px $tertiary-accent-color;
+        cursor: pointer;
+    }
 }

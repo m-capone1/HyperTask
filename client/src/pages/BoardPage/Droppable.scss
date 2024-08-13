@@ -11,6 +11,10 @@
     border-radius: 1rem;
     box-shadow: 0 0 8px white;
 
+    &__header {
+        align-self: center;
+    }
+
     &__modal {
         margin-top: auto;
     }
