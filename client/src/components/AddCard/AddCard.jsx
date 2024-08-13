@@ -3,6 +3,7 @@ import './AddCard.scss';
 import Modal from 'react-modal';
 import axios from'axios';
 import { useParams } from 'react-router-dom';
+import stars from '../../assets/icons/stars.png';
 
 const customStyles = {
     content: {
@@ -22,23 +23,20 @@ const AddCard = ({category, toggleTrigger}) => {
         project_id: id
     }
 
+    const [aiContent, setAiContent] = useState("");
     const [isHovered, setIsHovered] = useState(false);
     const [formData, setFormData] = useState(initialForm);
     const [modalIsOpen, setIsOpen] = useState(false);
     let baseUrl = 'http://localhost:8080';
-    let subtitle;
 
     function openModal() {
         setIsOpen(true);
     }
 
-    function afterOpenModal() {
-        subtitle.style.color = '#f00';
-    }
-
     function closeModal() {
         setIsOpen(false);
         setIsHovered(false);
+        setAiContent("");
     }
 
     const handleInputChange = (e) => {
@@ -67,6 +65,7 @@ const AddCard = ({category, toggleTrigger}) => {
                 const response = await axios.post(`${baseUrl}/card/cards/${id}`, formData);
                 
                 if(response) {
+                    setFormData(initialForm);
                     toggleTrigger();
                     setIsOpen(false);
                     setIsHovered(false);
@@ -77,23 +76,40 @@ const AddCard = ({category, toggleTrigger}) => {
         }
     }
 
+    const validateAi =() => {
+        const { title } = formData;
+
+        if (!title) {
+            alert("This field is required.")
+            return false;
+        }
+        return true;
+    }
+
     const handleGenerate = async(e) => {
         e.preventDefault();
-        
-        //call open ai api
-        //post req to create  call
-        // try {
-        //     const response = await axios.post(`${baseUrl}/card/cards/${id}`, formData);
-            
-        //     if(response) {
-        //         toggleTrigger();
-        //         setIsOpen(false);
-        //         setIsHovered(false);
-        //     }
-        // } catch(e) {
-        //     console.log("Error adding card", e);
-        // }
 
+        const { title } = formData;
+
+        if(validateAi()) {
+            const prompt = `Write 2-4 sentence kanban card task description based on the following title: ${title}. Enusre that only the content is provided, no headers, special characters, or seperations.`;
+
+            try { 
+                const response = await axios.post(`${baseUrl}/openai/generate`,
+                    {prompt}
+                );
+
+                let generatedContent = response.data;
+                setAiContent(generatedContent);
+                setFormData(prevState => ({
+                    ...prevState,
+                    description: generatedContent
+                }));
+
+            }catch(e){
+                console.log("Error generating card content:", e)
+            }
+        }
     }
 
     return (
@@ -107,7 +123,6 @@ const AddCard = ({category, toggleTrigger}) => {
                 { isHovered && <button onClick={openModal} className='overlay modal-button'>+ Add a Card</button>}
                 <Modal
                     isOpen={modalIsOpen}
-                    onAfterOpen={afterOpenModal}
                     onRequestClose={closeModal}
                     style={customStyles}
                     ariaHideApp={false}
@@ -119,7 +134,9 @@ const AddCard = ({category, toggleTrigger}) => {
                                 <div className='modal__title-container'>
                                     <label htmlFor='title' className='modal__title'>Title</label>
                                     <div className='modal__title-right'>
-                                        <button className='modal__button' onClick={handleGenerate}>AI Generate</button>
+                                        <button className='modal__button' onClick={handleGenerate}>
+                                            AI Generate
+                                        </button>
                                         <div className='modal__category'>Category: {category}</div>
                                     </div>
                                 </div>
@@ -139,7 +156,9 @@ const AddCard = ({category, toggleTrigger}) => {
                                     name='description' 
                                     id="description" 
                                     className='modal__textarea'
-                                    onChange={handleInputChange}>
+                                    onChange={handleInputChange}
+                                    value={formData.description}
+                                    placeholder="Enter your description here...">
                                 </textarea>
                             </form> 
                         </div>
