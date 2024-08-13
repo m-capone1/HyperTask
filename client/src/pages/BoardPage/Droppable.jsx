@@ -18,7 +18,7 @@ export function Droppable(props) {
       <h3 className='droppable__header'>{props.container}</h3>
       {props.children}
       <div className='droppable__modal'>
-        <AddCard category={category}/>
+        <AddCard category={category} toggleTrigger={props.toggleTrigger}/>
       </div>
     </div>
   );

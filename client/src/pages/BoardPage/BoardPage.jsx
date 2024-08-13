@@ -16,6 +16,7 @@ export default function BoardPage() {
   const [inProg, setInProg] = useState([]);
   const [inRev, setInRev] = useState([]);
   const [completed, setCompleted] = useState([]);
+  const [trigger, setTrigger] = useState(false);
   let containers = ["To Do", "In Progress", "In Review", "Completed"];
 
   const sortCards = (cards) => {
@@ -42,6 +43,10 @@ export default function BoardPage() {
     setCompleted(completedCards);
   };
 
+  const toggleTrigger = () => {
+    setTrigger(prev => !prev);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -54,7 +59,7 @@ export default function BoardPage() {
       }
     };
     fetchData();
-  }, [id]);
+  }, [id, trigger]);
 
   useEffect(() => {
     sortCards(cards);
@@ -69,65 +74,67 @@ export default function BoardPage() {
   
       let movedCard;
 
-      if (fromContainer === "To Do") {
-        setToDo(prevCards => {
-            const updatedCards = [...prevCards];
-            const index = updatedCards.findIndex(card => card.id === active.id);
-            movedCard = updatedCards.splice(index, 1)[0];
-            return updatedCards;
-          });
-      } else if (fromContainer === "In Progress") {
-        setInProg(prevCards => {
-          const updatedCards = [...prevCards];
-          const index = updatedCards.findIndex(card => card.id === active.id);
-          movedCard = updatedCards.splice(index, 1)[0];
-          return updatedCards;
-        });
-      } else if (fromContainer === "In Review") {
-        setInRev(prevCards => {
-          const updatedCards = [...prevCards];
-          const index = updatedCards.findIndex(card => card.id === active.id);
-          movedCard = updatedCards.splice(index, 1)[0];
-          return updatedCards;
-        });
-      } else if (fromContainer === "Completed") {
-        setCompleted(prevCards => {
-          const updatedCards = [...prevCards];
-          const index = updatedCards.findIndex(card => card.id === active.id);
-          movedCard = updatedCards.splice(index, 1)[0];
-          return updatedCards;
-        });
-      }
-
-      movedCard.category = toContainer;
-  
-      if (toContainer === "To Do") {
-        setToDo(prevCards => [...prevCards, movedCard]);
-      } else if (toContainer === "In Progress") {
-        setInProg(prevCards => [...prevCards, movedCard]);
-      } else if (toContainer === "In Review") {
-        setInRev(prevCards => [...prevCards, movedCard]);
-      } else if (toContainer === "Completed") {
-        setCompleted(prevCards => [...prevCards, movedCard]);
-      }
-
-      const updateDatabase = async() => {
-        try {
-            console.log(movedCard);
-            let movedCardId = movedCard.id;
-            let cardToUpdate = {
-                project_id: movedCard.project_id,
-                id : movedCard.id,
-                category: movedCard.category,
-                title: movedCard.title,
-                description: movedCard.description
+      if(fromContainer !== toContainer){
+        if (fromContainer === "To Do") {
+            setToDo(prevCards => {
+                const updatedCards = [...prevCards];
+                const index = updatedCards.findIndex(card => card.id === active.id);
+                movedCard = updatedCards.splice(index, 1)[0];
+                return updatedCards;
+              });
+          } else if (fromContainer === "In Progress") {
+            setInProg(prevCards => {
+              const updatedCards = [...prevCards];
+              const index = updatedCards.findIndex(card => card.id === active.id);
+              movedCard = updatedCards.splice(index, 1)[0];
+              return updatedCards;
+            });
+          } else if (fromContainer === "In Review") {
+            setInRev(prevCards => {
+              const updatedCards = [...prevCards];
+              const index = updatedCards.findIndex(card => card.id === active.id);
+              movedCard = updatedCards.splice(index, 1)[0];
+              return updatedCards;
+            });
+          } else if (fromContainer === "Completed") {
+            setCompleted(prevCards => {
+              const updatedCards = [...prevCards];
+              const index = updatedCards.findIndex(card => card.id === active.id);
+              movedCard = updatedCards.splice(index, 1)[0];
+              return updatedCards;
+            });
+          }
+    
+          movedCard.category = toContainer;
+      
+          if (toContainer === "To Do") {
+            setToDo(prevCards => [...prevCards, movedCard]);
+          } else if (toContainer === "In Progress") {
+            setInProg(prevCards => [...prevCards, movedCard]);
+          } else if (toContainer === "In Review") {
+            setInRev(prevCards => [...prevCards, movedCard]);
+          } else if (toContainer === "Completed") {
+            setCompleted(prevCards => [...prevCards, movedCard]);
+          }
+    
+          const updateDatabase = async() => {
+            try {
+                console.log(movedCard);
+                let movedCardId = movedCard.id;
+                let cardToUpdate = {
+                    project_id: movedCard.project_id,
+                    id : movedCard.id,
+                    category: movedCard.category,
+                    title: movedCard.title,
+                    description: movedCard.description
+                }
+                const response = await axios.put(`${baseUrl}/card/${movedCardId}`, cardToUpdate)
+            } catch(e) {
+                console.log("Error with put request", e);
             }
-            const response = await axios.put(`${baseUrl}/card/${movedCardId}`, cardToUpdate)
-        } catch(e) {
-            console.log("Error with put request", e);
+            }
+            updateDatabase();
         }
-        }
-        updateDatabase();
     }
   }
    
@@ -159,7 +166,7 @@ export default function BoardPage() {
             <DndContext onDragEnd={handleDragEnd}>
                 <div className='board'>
                     {containers.map((container, index) => (
-                        <Droppable key={container} id={container}>
+                        <Droppable key={container} id={container} toggleTrigger={toggleTrigger}>
                             <div className="board__header">{container}</div>
                             {(index === 0 ? toDo : index === 1 ? inProg : index === 2 ? inRev : completed).map((card) => (
                                 <Draggable key={card.id} id={card.id}>
@@ -178,4 +185,3 @@ export default function BoardPage() {
 //to do:
 //call open ai api to create prompts for 6 new kanban cards.
 //add the cards to the board to 'get user started' 
-//add button to add more cards (user can add cards manually or through a open ai prompt)

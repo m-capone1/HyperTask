@@ -13,7 +13,7 @@ const customStyles = {
     },
   };
 
-const AddCard = ({category}) => {
+const AddCard = ({category, toggleTrigger}) => {
     const { id } = useParams();
     const initialForm = {
         title: "",
@@ -48,24 +48,52 @@ const AddCard = ({category}) => {
             [name]: value
         }));
     };
-    
-    function handleAddCard(e) {
-        e.preventDefault();
-        console.log(formData);
 
-        const addCard = async() => {
+    function validateForm() {
+        const { title, description} = formData;
+
+        if (!title || !description) {
+            alert("This field is required.")
+            return false;
+        }
+        return true;
+    }
+    
+    const handleAddCard = async(e) => {
+        e.preventDefault();
+
+        if (validateForm()){
             try {
                 const response = await axios.post(`${baseUrl}/card/cards/${id}`, formData);
+                
+                if(response) {
+                    toggleTrigger();
+                    setIsOpen(false);
+                    setIsHovered(false);
+                }
             } catch(e) {
                 console.log("Error adding card", e);
             }
         }
-        addCard();
     }
 
-    function handleGenerate() {
+    const handleGenerate = async(e) => {
+        e.preventDefault();
+        
         //call open ai api
         //post req to create  call
+        // try {
+        //     const response = await axios.post(`${baseUrl}/card/cards/${id}`, formData);
+            
+        //     if(response) {
+        //         toggleTrigger();
+        //         setIsOpen(false);
+        //         setIsHovered(false);
+        //     }
+        // } catch(e) {
+        //     console.log("Error adding card", e);
+        // }
+
     }
 
     return (
