@@ -2,7 +2,7 @@
 
 .board {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
 
     &__details {
         background-color: $primary-text;

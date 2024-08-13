@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { DndContext } from '@dnd-kit/core';
 import { Droppable } from './Droppable';
 import { Draggable } from './Draggable';
+import './BoardPage.scss';
 
 export default function BoardPage() {
   const baseUrl = 'http://localhost:8080';
@@ -157,22 +158,23 @@ export default function BoardPage() {
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
-      {containers.map((container, index) => (
-        <Droppable key={container} id={container}>
-          <div>{container}</div>
-          {(index === 0 ? toDo : index === 1 ? inProg : index === 2 ? inRev : completed).map((card) => (
-            <Draggable key={card.id} id={card.id}>
-              {card.title}
-            </Draggable>
-          ))}
-        </Droppable>
-      ))}
+        <div className='board'>
+            {containers.map((container, index) => (
+                    <Droppable key={container} id={container}>
+                        <div className="board__header">{container}</div>
+                        {(index === 0 ? toDo : index === 1 ? inProg : index === 2 ? inRev : completed).map((card) => (
+                            <Draggable key={card.id} id={card.id}>
+                                {card.title}
+                            </Draggable>
+                        ))}
+                    </Droppable>
+            ))}
+        </div>
     </DndContext>
   );
 }
 
 //to do:
-// make it so card will drag and drop onto one of the four columns
 //call open ai api to create prompts for 6 new kanban cards.
 //add the cards to the board to 'get user started' 
 //add button to add more cards (user can add cards manually or through a open ai prompt)
