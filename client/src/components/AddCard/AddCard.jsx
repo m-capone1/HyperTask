@@ -1,35 +1,38 @@
 import { useState } from 'react';
 import './AddCard.scss';
 import Modal from 'react-modal';
-
-//Modal.setAppElement('AddCard');
+import axios from'axios';
+import { useParams } from 'react-router-dom';
 
 const customStyles = {
     content: {
-    //   top: '10%',
-      left: '15%',
-    //   right: 'auto',
-    //   bottom: 'auto',
-    //   marginRight: '-50%',
-    //   transform: 'translate(-10%, -10%)',
+        left: '15%',
         width: '70%',
-        backgroundColor: 'blue',
+        backgroundColor: ' $background',
         borderRadius: '1rem'
     },
   };
 
 const AddCard = ({category}) => {
-    const [isHovered, setIsHovered] = useState(false);
+    const { id } = useParams();
+    const initialForm = {
+        title: "",
+        description: "",
+        category: category,
+        project_id: id
+    }
 
-    let subtitle;
+    const [isHovered, setIsHovered] = useState(false);
+    const [formData, setFormData] = useState(initialForm);
     const [modalIsOpen, setIsOpen] = useState(false);
+    let baseUrl = 'http://localhost:8080';
+    let subtitle;
 
     function openModal() {
         setIsOpen(true);
     }
 
     function afterOpenModal() {
-        // references are now sync'd and can be accessed.
         subtitle.style.color = '#f00';
     }
 
@@ -37,9 +40,32 @@ const AddCard = ({category}) => {
         setIsOpen(false);
         setIsHovered(false);
     }
-    
-    function handleAddCard() {
 
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+    
+    function handleAddCard(e) {
+        e.preventDefault();
+        console.log(formData);
+
+        const addCard = async() => {
+            try {
+                const response = await axios.post(`${baseUrl}/card/cards/${id}`, formData);
+            } catch(e) {
+                console.log("Error adding card", e);
+            }
+        }
+        addCard();
+    }
+
+    function handleGenerate() {
+        //call open ai api
+        //post req to create  call
     }
 
     return (
@@ -64,15 +90,29 @@ const AddCard = ({category}) => {
                             <form className='modal__form'>
                                 <div className='modal__title-container'>
                                     <label htmlFor='title' className='modal__title'>Title</label>
-                                    <div className='modal__category'>Category: {category}</div>
+                                    <div className='modal__title-right'>
+                                        <button className='modal__button' onClick={handleGenerate}>AI Generate</button>
+                                        <div className='modal__category'>Category: {category}</div>
+                                    </div>
                                 </div>
-                                <input id='title' name='title' className='modal__input'></input>
+                                <input 
+                                    id='title' 
+                                    name='title' 
+                                    className='modal__input'
+                                    onChange={handleInputChange}>
+                                </input>
                             </form>
                         </div>
                         <div className='modal'>
                             <form className='modal__form'>
                                 <label htmlFor='description' className='modal__description'>Description</label>
-                                <textarea type="text" name='description' id="description" className='modal__textarea'></textarea>
+                                <textarea 
+                                    type="text" 
+                                    name='description' 
+                                    id="description" 
+                                    className='modal__textarea'
+                                    onChange={handleInputChange}>
+                                </textarea>
                             </form> 
                         </div>
                         <div className='modal__buttons'>

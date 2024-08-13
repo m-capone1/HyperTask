@@ -4,17 +4,14 @@ import * as cardController from "../controllers/cardController.js";
 const router = express.Router();
 
 router
-    .route('/')
-    .post(cardController.createCard);
-
-router
     .route('/:id')
     .get(cardController.singleCard)
     .put(cardController.updateCard);
 
 router
     .route('/cards/:projectId')
-    .get(cardController.cardsByProjectId);
+    .get(cardController.cardsByProjectId)
+    .post(cardController.createCard);
 
 router 
     .route('/:projectId/todo')
