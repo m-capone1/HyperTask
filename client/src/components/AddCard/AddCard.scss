@@ -1,0 +1,23 @@
+@use '../../assets/partials/variables' as *;
+
+.container {
+    display: flex;
+    justify-content: flex-end;
+    height: 4rem;
+    margin: 0;
+    background-color:$background;
+}
+
+.overlay {
+    width: 100%;
+    height: 2rem;
+    cursor: pointer;
+    background-color: $background; 
+    color: $primary-text;
+}
+
+.modal-button {
+    font-family: 'Montserrat', sans-serif;
+    border: none;
+    font-size: 1rem;;
+}

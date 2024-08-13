@@ -6,7 +6,9 @@
     margin: 0 1rem;
 
     &__details {
-        background-color: $primary-text;
+        display: flex;
+        align-items: center;
+        background-color: $hero-background;
         height: 4rem;
         padding: 0;
     }

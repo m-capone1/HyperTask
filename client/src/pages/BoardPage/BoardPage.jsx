@@ -10,6 +10,7 @@ export default function BoardPage() {
   const baseUrl = 'http://localhost:8080';
   const { id } = useParams();
 
+  const [project, setProject]= useState({});
   const [cards, setCards] = useState([]);
   const [toDo, setToDo] = useState([]);
   const [inProg, setInProg] = useState([]);
@@ -45,8 +46,9 @@ export default function BoardPage() {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${baseUrl}/card/cards/${id}`);
+        const responseProject = await axios.get(`${baseUrl}/project/${id}`)
         setCards(response.data);
-
+        setProject(responseProject.data);
       } catch (error) {
         console.error('Error fetching card data:', error);
       }
@@ -57,7 +59,6 @@ export default function BoardPage() {
   useEffect(() => {
     sortCards(cards);
   }, [cards]);
-
 
   function handleDragEnd(event) {
     const { over, active } = event;
@@ -97,8 +98,6 @@ export default function BoardPage() {
           return updatedCards;
         });
       }
-      console.log(`to: ${toContainer}, from: ${fromContainer}`);
-      console.log('Moved card:', movedCard);
 
       movedCard.category = toContainer;
   
@@ -127,9 +126,8 @@ export default function BoardPage() {
         } catch(e) {
             console.log("Error with put request", e);
         }
-    }
-
-      updateDatabase();
+        }
+        updateDatabase();
     }
   }
    
@@ -152,25 +150,28 @@ export default function BoardPage() {
         }
     }
 
-//   if(!cards){
-//     return <div>Loading...</div>
-//   }
-
   return (
-    <DndContext onDragEnd={handleDragEnd}>
-        <div className='board'>
-            {containers.map((container, index) => (
-                <Droppable key={container} id={container}>
-                    <div className="board__header">{container}</div>
-                    {(index === 0 ? toDo : index === 1 ? inProg : index === 2 ? inRev : completed).map((card) => (
-                        <Draggable key={card.id} id={card.id}>
-                            {card.title}
-                        </Draggable>
+    <>
+        <section className='board__details'>
+            <div className='board__name'>{project.name}</div>
+        </section>
+        <section>
+            <DndContext onDragEnd={handleDragEnd}>
+                <div className='board'>
+                    {containers.map((container, index) => (
+                        <Droppable key={container} id={container}>
+                            <div className="board__header">{container}</div>
+                            {(index === 0 ? toDo : index === 1 ? inProg : index === 2 ? inRev : completed).map((card) => (
+                                <Draggable key={card.id} id={card.id}>
+                                    {card.title}
+                                </Draggable>
+                            ))}
+                        </Droppable>
                     ))}
-                </Droppable>
-            ))}
-        </div>
-    </DndContext>
+                </div>
+            </DndContext>
+        </section>
+    </>
   );
 }
 
