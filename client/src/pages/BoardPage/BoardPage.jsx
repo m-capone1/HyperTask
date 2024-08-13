@@ -160,14 +160,14 @@ export default function BoardPage() {
     <DndContext onDragEnd={handleDragEnd}>
         <div className='board'>
             {containers.map((container, index) => (
-                    <Droppable key={container} id={container}>
-                        <div className="board__header">{container}</div>
-                        {(index === 0 ? toDo : index === 1 ? inProg : index === 2 ? inRev : completed).map((card) => (
-                            <Draggable key={card.id} id={card.id}>
-                                {card.title}
-                            </Draggable>
-                        ))}
-                    </Droppable>
+                <Droppable key={container} id={container}>
+                    <div className="board__header">{container}</div>
+                    {(index === 0 ? toDo : index === 1 ? inProg : index === 2 ? inRev : completed).map((card) => (
+                        <Draggable key={card.id} id={card.id}>
+                            {card.title}
+                        </Draggable>
+                    ))}
+                </Droppable>
             ))}
         </div>
     </DndContext>

@@ -3,6 +3,7 @@
 .board {
     display: flex;
     flex-direction: row;
+    margin: 0 1rem;
 
     &__details {
         background-color: $primary-text;
@@ -17,7 +18,7 @@
     }
 
     &__header {
-        background-color: $secondary-accent-color;
+        background-color: $tertiary-accent-color;
         height: 2rem;
         border-radius: 1rem;
         font-size: 1rem;
@@ -26,6 +27,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        margin-bottom: 0.5rem;
     }
 
     &__kanban {
