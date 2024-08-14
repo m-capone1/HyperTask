@@ -55,6 +55,18 @@ const ViewCard = ({ isOpen, card, onClose, toggleTrigger }) => {
     };
 
     const handleDeleteCard = async(e) => {
+        e.preventDefault();
+        let cardId = card.id;
+        
+        try {
+            const response = await axios.delete(`${baseUrl}/card/${cardId}`)
+
+        }catch(e){
+            console.log("Error saving card", e);
+        }
+
+        onClose();
+        toggleTrigger();
 
     }
 

@@ -57,42 +57,6 @@ const cardsByProjectId = async (req, res) => {
   }
 };
 
-const toDoCardList = async (req, res) => {
-  try {
-    const data = await knex.select("*").from("card").where({ category: 'To Do' });
-    res.status(200).json(data);
-  } catch (err) {
-    res.status(400).send(`Error retrieving card data: ${err}`);
-  }
-};
-
-const inProgCardList = async (req, res) => {
-  try {
-    const data = await knex.select("*").from("card").where({ category: 'In Progress' });
-    res.status(200).json(data);
-  } catch (err) {
-    res.status(400).send(`Error retrieving card data: ${err}`);
-  }
-};
-
-const inRevCardList = async (req, res) => {
-  try {
-    const data = await knex.select("*").from("card").where({ category: 'In Review' });
-    res.status(200).json(data);
-  } catch (err) {
-    res.status(400).send(`Error retrieving card data: ${err}`);
-  }
-};
-
-const completedCardList = async (req, res) => {
-  try {
-    const data = await knex.select("*").from("card").where({ category: 'Completed' });
-    res.status(200).json(data);
-  } catch (err) {
-    res.status(400).send(`Error retrieving card data: ${err}`);
-  }
-};
-
 const updateCard= async (req, res) => {
   try{
     const rowsUpdated = await knex("card").where({ id: req.params.id }).update(req.body);
@@ -108,10 +72,24 @@ const updateCard= async (req, res) => {
     res.status(200).json(updatedCard[0]);
   } catch (error) {
     res.status(500).json({
-      message: `Unable to update inventory item with ID ${req.params.id}: ${error}`,
+      message: `Unable to update card with ID ${req.params.id}: ${error}`,
     });
   }
 }
 
+const deleteCard = async (req, res) => {
+  try {
+    const result = await knex("card").where({ id: req.params.id }).del();
 
-export { singleCard, createCard, cardsByProjectId, toDoCardList, inProgCardList, inRevCardList, completedCardList, updateCard };
+    if (result === 0) {
+      return res.status(400).json({ message: "carde not found, so could not delete" });
+    }
+
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ message: "Unable to delete card" });
+  }
+};
+
+
+export { singleCard, createCard, cardsByProjectId, updateCard, deleteCard };
