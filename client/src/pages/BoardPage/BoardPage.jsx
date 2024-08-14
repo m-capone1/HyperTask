@@ -163,10 +163,8 @@ export default function BoardPage() {
 
     const handleViewCard = (card) => {
         let cardTitle = card.target.innerText;
-        
         const selectCard = cards.find(item => item.title === cardTitle);
 
-        console.log(selectCard);
         setSelectedCard(selectCard);
         setShowModal(true);
     };
@@ -204,7 +202,8 @@ export default function BoardPage() {
           <ViewCard 
             isOpen={showModal} 
             card={selectedCard} 
-            onClose={handleCloseModal} 
+            onClose={handleCloseModal}
+            toggleTrigger={toggleTrigger}
           />
         )}
     </>

@@ -1,21 +1,62 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
+import axios from 'axios';
 import './ViewCard.scss';
+import { useParams } from 'react-router-dom';
 
-const ViewCard = ({ isOpen, card, onClose }) => {
+const ViewCard = ({ isOpen, card, onClose, toggleTrigger }) => {
+    const baseUrl = 'http://localhost:8080';
+    const [formData, setFormData] = useState({
+        title: '',
+        description: '',
+        category: ''
+    });
+    const { id } = useParams();
 
-    console.log(card);
+    useEffect(() => {
+        if (card) {
+            setFormData({
+                title: card.title || '',
+                description: card.description || '',
+                category: card.category || ''
+            });
+        }
+    }, [card]);
 
     const handleInputChange = (e) => {
-        // your input change logic...
+        const { name, value } = e.target;
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
     };
 
-    const handleAddCard = async (e) => {
-        // your add card logic...
+    const handleSaveCard = async (e) => {
+        e.preventDefault();
+        let cardId = card.id;
+
+        let updateCard = {
+            ...formData,
+            id: `${cardId}`,
+            project_id: id
+        }
+
+        console.log(updateCard);
+
+        try {
+            const response = await axios.put(`${baseUrl}/card/${cardId}`, updateCard)
+
+        }catch(e){
+            console.log("Error saving card", e);
+        }
+    
+        onClose();
+        toggleTrigger();
     };
 
-    // console.log(card.target.innerText);
-    // console.log(card);
+    const handleDeleteCard = async(e) => {
+
+    }
 
     return (
         <Modal
@@ -24,20 +65,20 @@ const ViewCard = ({ isOpen, card, onClose }) => {
             className='modal-container'
             ariaHideApp={false}
         >
-            <div className='modal'>                      
+            <div className='modal'>
                 <div className='modal'>
                     <form className='modal__form'>
                         <div className='modal__title-container'>
                             <label htmlFor='title' className='modal__title'>Title</label>
                             <div className='modal__title-right'>
-                                <div className='modal__category'>{card.category}</div>
+                                <div className='modal__category'>{formData.category}</div>
                             </div>
                         </div>
                         <input 
                             id='title' 
                             name='title' 
                             className='modal__input'
-                            value={card.title}
+                            value={formData.title}
                             onChange={handleInputChange}
                             placeholder="Enter the title of your card here..."
                         />
@@ -46,23 +87,23 @@ const ViewCard = ({ isOpen, card, onClose }) => {
                 <div className='modal'>
                     <form className='modal__form'>
                         <div className='modal__description-row'>
-                            <label htmlFor='description' className='modal__description'>Description</label>
-                            <button className='modal__button'>AI Generate</button>         
+                            <label htmlFor='description' className='modal__description'>Description</label>        
                         </div>
                         <textarea 
                             type="text" 
                             name='description' 
                             id="description" 
                             className='modal__textarea'
-                            value={card.description}
+                            value={formData.description}
                             onChange={handleInputChange}
                             placeholder="Enter your description here..."
                         />
                     </form> 
                 </div>
                 <div className='modal__buttons'>
-                    <button onClick={handleAddCard} className='modal__button'>+ Add Card</button>
+                    <button onClick={handleSaveCard} className='modal__button'>Save</button>
                     <button onClick={onClose} className='modal__button'>Close</button>
+                    <button onClick={handleDeleteCard} className='modal__button delete'>Delete Card</button>
                 </div>
             </div>
         </Modal>
