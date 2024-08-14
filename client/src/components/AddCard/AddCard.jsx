@@ -5,15 +5,6 @@ import axios from'axios';
 import { useParams } from 'react-router-dom';
 import stars from '../../assets/icons/stars.png';
 
-const customStyles = {
-    content: {
-        left: '15%',
-        width: '70%',
-        backgroundColor: ' $background',
-        borderRadius: '1rem'
-    },
-  };
-
 const AddCard = ({category, toggleTrigger}) => {
     const { id } = useParams();
     const initialForm = {
@@ -124,19 +115,15 @@ const AddCard = ({category, toggleTrigger}) => {
                 <Modal
                     isOpen={modalIsOpen}
                     onRequestClose={closeModal}
-                    style={customStyles}
+                    className='modal-container'
                     ariaHideApp={false}
-                    contentLabel="Example Modal"
                 >
-                    <div className='modal-container'>                      
+                    <div className='modal'>                      
                         <div className='modal'>
                             <form className='modal__form'>
                                 <div className='modal__title-container'>
                                     <label htmlFor='title' className='modal__title'>Title</label>
                                     <div className='modal__title-right'>
-                                        <button className='modal__button' onClick={handleGenerate}>
-                                            AI Generate
-                                        </button>
                                         <div className='modal__category'>Category: {category}</div>
                                     </div>
                                 </div>
@@ -144,13 +131,17 @@ const AddCard = ({category, toggleTrigger}) => {
                                     id='title' 
                                     name='title' 
                                     className='modal__input'
-                                    onChange={handleInputChange}>
+                                    onChange={handleInputChange}
+                                    placeholder="Enter the title of your card here...">
                                 </input>
                             </form>
                         </div>
                         <div className='modal'>
                             <form className='modal__form'>
-                                <label htmlFor='description' className='modal__description'>Description</label>
+                                <div className='modal__description-row'>
+                                    <label htmlFor='description' className='modal__description'>Description</label>
+                                    <button className='modal__button' onClick={handleGenerate}>AI Generate</button>         
+                                </div>
                                 <textarea 
                                     type="text" 
                                     name='description' 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {useDraggable} from '@dnd-kit/core';
 import './Draggable.scss';
 
@@ -10,9 +10,8 @@ export function Draggable(props) {
     transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
   } : undefined;
 
-  
   return (
-    <button ref={setNodeRef}  className='draggable' style={style} {...listeners} {...attributes}>
+    <button ref={setNodeRef} onMouseDown={props.handleViewCard} className='draggable' style={style} {...listeners} {...attributes}>
       {props.children}
     </button>
   );

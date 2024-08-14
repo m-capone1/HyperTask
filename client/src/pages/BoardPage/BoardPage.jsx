@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { DndContext } from '@dnd-kit/core';
 import { Droppable } from './Droppable';
 import { Draggable } from './Draggable';
+import ViewCard from '../../components/ViewCard/ViewCard';
 import './BoardPage.scss';
 
 export default function BoardPage() {
@@ -17,6 +18,9 @@ export default function BoardPage() {
   const [inRev, setInRev] = useState([]);
   const [completed, setCompleted] = useState([]);
   const [trigger, setTrigger] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
+  
   let containers = ["To Do", "In Progress", "In Review", "Completed"];
 
   const sortCards = (cards) => {
@@ -157,6 +161,21 @@ export default function BoardPage() {
         }
     }
 
+    const handleViewCard = (card) => {
+        let cardTitle = card.target.innerText;
+        
+        const selectCard = cards.find(item => item.title === cardTitle);
+
+        console.log(selectCard);
+        setSelectedCard(selectCard);
+        setShowModal(true);
+    };
+    
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setSelectedCard(null);
+    };
+
   return (
     <>
         <section className='board__details'>
@@ -169,8 +188,11 @@ export default function BoardPage() {
                         <Droppable key={container} id={container} toggleTrigger={toggleTrigger}>
                             <div className="board__header">{container}</div>
                             {(index === 0 ? toDo : index === 1 ? inProg : index === 2 ? inRev : completed).map((card) => (
-                                <Draggable key={card.id} id={card.id}>
-                                    {card.title}
+                                <Draggable 
+                                    key={card.id} 
+                                    id={card.id} 
+                                    handleViewCard={handleViewCard}>
+                                        {card.title}
                                 </Draggable>
                             ))}
                         </Droppable>
@@ -178,10 +200,13 @@ export default function BoardPage() {
                 </div>
             </DndContext>
         </section>
+        {selectedCard && (
+          <ViewCard 
+            isOpen={showModal} 
+            card={selectedCard} 
+            onClose={handleCloseModal} 
+          />
+        )}
     </>
   );
 }
-
-//to do:
-//call open ai api to create prompts for 6 new kanban cards.
-//add the cards to the board to 'get user started' 
