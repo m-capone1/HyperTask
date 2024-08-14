@@ -17,7 +17,7 @@ function App() {
           <Route path='/get-started' element={<GetStartedPage />} />
           {/* <Route path ='/login' element={<LoginPage />} />  */}
           <Route path='/board/:id' element={<BoardPage />} />
-          <Route path ='/project-details' element={<ProjectDetails />} />
+          <Route path ='/board/:id/project-details' element={<ProjectDetails />} />
         </Routes>
       </BrowserRouter>
       <Footer />

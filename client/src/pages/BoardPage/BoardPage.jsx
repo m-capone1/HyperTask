@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { DndContext } from '@dnd-kit/core';
 import { Droppable } from './Droppable';
 import { Draggable } from './Draggable';
@@ -10,6 +10,7 @@ import './BoardPage.scss';
 export default function BoardPage() {
   const baseUrl = 'http://localhost:8080';
   const { id } = useParams();
+  let navigate = useNavigate();
 
   const [project, setProject]= useState({});
   const [cards, setCards] = useState([]);
@@ -80,34 +81,34 @@ export default function BoardPage() {
 
       if(fromContainer !== toContainer){
         if (fromContainer === "To Do") {
-            setToDo(prevCards => {
-                const updatedCards = [...prevCards];
-                const index = updatedCards.findIndex(card => card.id === active.id);
-                movedCard = updatedCards.splice(index, 1)[0];
-                return updatedCards;
-              });
-          } else if (fromContainer === "In Progress") {
-            setInProg(prevCards => {
+          setToDo(prevCards => {
               const updatedCards = [...prevCards];
               const index = updatedCards.findIndex(card => card.id === active.id);
               movedCard = updatedCards.splice(index, 1)[0];
               return updatedCards;
             });
-          } else if (fromContainer === "In Review") {
-            setInRev(prevCards => {
-              const updatedCards = [...prevCards];
-              const index = updatedCards.findIndex(card => card.id === active.id);
-              movedCard = updatedCards.splice(index, 1)[0];
-              return updatedCards;
-            });
-          } else if (fromContainer === "Completed") {
-            setCompleted(prevCards => {
-              const updatedCards = [...prevCards];
-              const index = updatedCards.findIndex(card => card.id === active.id);
-              movedCard = updatedCards.splice(index, 1)[0];
-              return updatedCards;
-            });
-          }
+        } else if (fromContainer === "In Progress") {
+          setInProg(prevCards => {
+            const updatedCards = [...prevCards];
+            const index = updatedCards.findIndex(card => card.id === active.id);
+            movedCard = updatedCards.splice(index, 1)[0];
+            return updatedCards;
+          });
+        } else if (fromContainer === "In Review") {
+          setInRev(prevCards => {
+            const updatedCards = [...prevCards];
+            const index = updatedCards.findIndex(card => card.id === active.id);
+            movedCard = updatedCards.splice(index, 1)[0];
+            return updatedCards;
+          });
+        } else if (fromContainer === "Completed") {
+          setCompleted(prevCards => {
+            const updatedCards = [...prevCards];
+            const index = updatedCards.findIndex(card => card.id === active.id);
+            movedCard = updatedCards.splice(index, 1)[0];
+            return updatedCards;
+          });
+        }
     
           movedCard.category = toContainer;
       
@@ -143,36 +144,42 @@ export default function BoardPage() {
   }
    
   function findContainer(cardId) {
-        let foundContainer = toDo.find(card => card.id === cardId);
-        if(foundContainer){
-            return 'To Do'
-        }
-        foundContainer = inProg.find(card => card.id === cardId);
-        if(foundContainer){
-            return 'In Progress'
-        }
-        foundContainer = inRev.find(card => card.id === cardId);
-        if(foundContainer){
-            return 'In Review'
-        }
-        foundContainer = completed.find(card => card.id === cardId);
-        if(foundContainer){
-            return 'Completed'
-        }
+    let foundContainer = toDo.find(card => card.id === cardId);
+    if(foundContainer){
+      return 'To Do'
     }
+    foundContainer = inProg.find(card => card.id === cardId);
+    if(foundContainer){
+      return 'In Progress'
+    }
+    foundContainer = inRev.find(card => card.id === cardId);
+    if(foundContainer){
+      return 'In Review'
+    }
+    foundContainer = completed.find(card => card.id === cardId);
+    if(foundContainer){
+      return 'Completed'
+    }
+  } 
 
     const handleViewCard = (card) => {
-        let cardTitle = card.target.innerText;
-        const selectCard = cards.find(item => item.title === cardTitle);
+      let cardTitle = card.target.innerText;
+      const selectCard = cards.find(item => item.title === cardTitle);
 
-        setSelectedCard(selectCard);
-        setShowModal(true);
+      setSelectedCard(selectCard);
+      setShowModal(true);
     };
     
     const handleCloseModal = () => {
-        setShowModal(false);
-        setSelectedCard(null);
+      setShowModal(false);
+      setSelectedCard(null);
     };
+
+    const handleNavigate = (e) => {
+      e.preventDefault;
+      const currentPath = window.location.pathname;
+      navigate(`${currentPath}/project-details`);
+    }
 
   return (
     <>
@@ -206,6 +213,7 @@ export default function BoardPage() {
             toggleTrigger={toggleTrigger}
           />
         )}
+        <button onClick={handleNavigate}>Project Details</button>
     </>
   );
 }
