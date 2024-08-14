@@ -9,6 +9,7 @@ export default function ProjectDetails() {
     let baseUrl= 'http://localhost:8080'
     const [project, setProject] = useState({});
     const [cards, setCards] = useState([]);
+    const [generatedContent, setGeneratedContent] = useState({});
 
     const countCards = () => {
         let cardCount = {
@@ -38,22 +39,37 @@ export default function ProjectDetails() {
     
     useEffect(() => {
         const fetchData = async () => {
-          try {
-            const response = await axios.get(`${baseUrl}/card/cards/${id}`);
-            const responseProject = await axios.get(`${baseUrl}/project/${id}`)
-            setCards(response.data);
-            setProject(responseProject.data);
+            
+            try {
+                const response = await axios.get(`${baseUrl}/card/cards/${id}`);
+                const responseProject = await axios.get(`${baseUrl}/project/${id}`)
+                setCards(response.data);
+                setProject(responseProject.data);
+
+                if (responseProject){
+                    let prompt = `generate a report and metrics summary for this project: $`
+                    const responseAi = await axios.post(`${baseUrl}/openai/generate`,
+                        {prompt}
+                    );
+
+                    console.log(responseAi.data);
+                    setGeneratedContent(responseAi);
+                }
           } catch (error) {
-            console.error('Error fetching card data:', error);
+            console.error('Error fetching data:', error);
           }
         };
         fetchData();
     }, [id]);
 
     return (
-        <section>
-            <h1>{project.name} details page</h1>
-            <section className="details">
+        <section className="details">
+            <h1 className="details__header">{project.name} Summary</h1>
+            <section>
+                <h2>Project Summary</h2>
+                {/* <div>{generatedContent}</div> */}
+            </section>
+            <section className="details__chart">
                 <DonutChart countCards={countCards} />
             </section>
         </section>

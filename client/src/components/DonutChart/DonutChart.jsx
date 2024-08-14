@@ -13,10 +13,10 @@ const DonutChart = ({countCards}) => {
       label: 'Progress Chart',
       data: [cardCount.todo, cardCount.inprog, cardCount.inrev, cardCount.comp],
       backgroundColor: [
-        'rgb(255, 99, 132)',
-        'rgb(54, 162, 235)',
-        'rgb(255, 205, 86)',
-        'rgb(0, 205, 86)'
+        '#050C9C',
+        '#3572EF',
+        '#3ABEF9',
+        '#A7E6FF'
       ],
       hoverOffset: 4
     }]
@@ -25,7 +25,7 @@ const DonutChart = ({countCards}) => {
   return (
     <div className='chart-container'>
       <h2 className='chart-container__header'>Progress Chart</h2>
-      <div className='chart'>
+      <div className='chart-container__chart'>
             <Doughnut data={data} />
       </div>
     </div>
