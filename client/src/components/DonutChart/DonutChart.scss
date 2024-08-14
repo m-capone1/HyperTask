@@ -1,0 +1,11 @@
+.chart-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &__header{
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+}

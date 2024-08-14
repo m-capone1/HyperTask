@@ -110,36 +110,38 @@ export default function BoardPage() {
           });
         }
     
-          movedCard.category = toContainer;
+        movedCard.category = toContainer;
       
-          if (toContainer === "To Do") {
-            setToDo(prevCards => [...prevCards, movedCard]);
-          } else if (toContainer === "In Progress") {
-            setInProg(prevCards => [...prevCards, movedCard]);
-          } else if (toContainer === "In Review") {
-            setInRev(prevCards => [...prevCards, movedCard]);
-          } else if (toContainer === "Completed") {
-            setCompleted(prevCards => [...prevCards, movedCard]);
-          }
-    
-          const updateDatabase = async() => {
-            try {
-                console.log(movedCard);
-                let movedCardId = movedCard.id;
-                let cardToUpdate = {
-                    project_id: movedCard.project_id,
-                    id : movedCard.id,
-                    category: movedCard.category,
-                    title: movedCard.title,
-                    description: movedCard.description
-                }
-                const response = await axios.put(`${baseUrl}/card/${movedCardId}`, cardToUpdate)
-            } catch(e) {
-                console.log("Error with put request", e);
-            }
-            }
-            updateDatabase();
+        if (toContainer === "To Do") {
+          setToDo(prevCards => [...prevCards, movedCard]);
+        } else if (toContainer === "In Progress") {
+          setInProg(prevCards => [...prevCards, movedCard]);
+        } else if (toContainer === "In Review") {
+          setInRev(prevCards => [...prevCards, movedCard]);
+        } else if (toContainer === "Completed") {
+          setCompleted(prevCards => [...prevCards, movedCard]);
         }
+    
+        const updateDatabase = async() => {
+          try {
+            console.log(movedCard);
+            let movedCardId = movedCard.id;
+            
+            let cardToUpdate = {
+              project_id: movedCard.project_id,
+              id : movedCard.id,
+              category: movedCard.category,
+              title: movedCard.title,
+              description: movedCard.description
+            }
+            
+            const response = await axios.put(`${baseUrl}/card/${movedCardId}`, cardToUpdate)
+          } catch(e) {
+              console.log("Error with put request", e);
+          }
+        }
+        updateDatabase();
+      }
     }
   }
    
@@ -162,58 +164,58 @@ export default function BoardPage() {
     }
   } 
 
-    const handleViewCard = (card) => {
-      let cardTitle = card.target.innerText;
-      const selectCard = cards.find(item => item.title === cardTitle);
+  const handleViewCard = (card) => {
+    let cardTitle = card.target.innerText;
+    const selectCard = cards.find(item => item.title === cardTitle);
 
-      setSelectedCard(selectCard);
-      setShowModal(true);
-    };
-    
-    const handleCloseModal = () => {
-      setShowModal(false);
-      setSelectedCard(null);
-    };
+    setSelectedCard(selectCard);
+    setShowModal(true);
+  };
+  
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedCard(null);
+  };
 
-    const handleNavigate = (e) => {
-      e.preventDefault;
-      const currentPath = window.location.pathname;
-      navigate(`${currentPath}/project-details`);
-    }
+  const handleNavigate = (e) => {
+    e.preventDefault;
+    const currentPath = window.location.pathname;
+    navigate(`${currentPath}/project-details`);
+  }
 
   return (
     <>
-        <section className='board__details'>
-            <div className='board__name'>{project.name}</div>
-        </section>
-        <section>
-            <DndContext onDragEnd={handleDragEnd}>
-                <div className='board'>
-                    {containers.map((container, index) => (
-                        <Droppable key={container} id={container} toggleTrigger={toggleTrigger}>
-                            <div className="board__header">{container}</div>
-                            {(index === 0 ? toDo : index === 1 ? inProg : index === 2 ? inRev : completed).map((card) => (
-                                <Draggable 
-                                    key={card.id} 
-                                    id={card.id} 
-                                    handleViewCard={handleViewCard}>
-                                        {card.title}
-                                </Draggable>
-                            ))}
-                        </Droppable>
-                    ))}
-                </div>
-            </DndContext>
-        </section>
-        {selectedCard && (
-          <ViewCard 
-            isOpen={showModal} 
-            card={selectedCard} 
-            onClose={handleCloseModal}
-            toggleTrigger={toggleTrigger}
-          />
-        )}
-        <button onClick={handleNavigate}>Project Details</button>
+      <section className='board__details'>
+        <div className='board__name'>{project.name}</div>
+      </section>
+      <section>
+        <DndContext onDragEnd={handleDragEnd}>
+          <div className='board'>
+            {containers.map((container, index) => (
+              <Droppable key={container} id={container} toggleTrigger={toggleTrigger}>
+                <div className="board__header">{container}</div>
+                {(index === 0 ? toDo : index === 1 ? inProg : index === 2 ? inRev : completed).map((card) => (
+                  <Draggable 
+                    key={card.id} 
+                    id={card.id} 
+                    handleViewCard={handleViewCard}>
+                      {card.title}
+                  </Draggable>
+                ))}
+              </Droppable>
+            ))}
+          </div>
+        </DndContext>
+      </section>
+      {selectedCard && (
+        <ViewCard 
+          isOpen={showModal} 
+          card={selectedCard} 
+          onClose={handleCloseModal}
+          toggleTrigger={toggleTrigger}
+        />
+      )}
+      <button onClick={handleNavigate}>Project Details</button>
     </>
   );
 }
