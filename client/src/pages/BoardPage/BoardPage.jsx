@@ -5,6 +5,7 @@ import { DndContext } from '@dnd-kit/core';
 import { Droppable } from './Droppable';
 import { Draggable } from './Draggable';
 import ViewCard from '../../components/ViewCard/ViewCard';
+import AiTaskHelper from '../AI Task Helper/AiTaskHelper';
 import './BoardPage.scss';
 
 export default function BoardPage() {
@@ -198,7 +199,14 @@ export default function BoardPage() {
   const handleNavigate = (e) => {
     e.preventDefault;
     const currentPath = window.location.pathname;
-    navigate(`${currentPath}/project-details`);
+    console.log(e.target.name);
+    if(e.target.name === "project-details"){
+      navigate(`${currentPath}/project-details`);
+    }
+
+    if(e.target.name === "ai-task-helper"){
+      navigate(`${currentPath}/ai-task-helper`);
+    }
   }
   
   return (
@@ -235,7 +243,8 @@ export default function BoardPage() {
           toggleTrigger={toggleTrigger}
         />
       )}
-      <button onClick={handleNavigate}>Project Details</button>
+      <button onClick={handleNavigate} name="project-details">Project Details</button>
+      <button onClick={handleNavigate} name="ai-task-helper">Ai Task Helper</button>
     </>
   );
 }
