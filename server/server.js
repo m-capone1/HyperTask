@@ -9,15 +9,12 @@ import authRoutes from './routes/authRoute.js';
 import userRoute from './routes/userRoute.js';
 import cardRoute from './routes/cardRoute.js';
 
-//addd env variables
 const app = express();
 const port = 8080;
 
-//middleware
 app.use(bodyParser.json());
 app.use(cors());
 
-//endpoints
 app.use('/project', projectRoute);
 app.use('/openai', openaiRoute);
 app.use('/', authRoutes)

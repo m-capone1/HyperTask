@@ -9,7 +9,8 @@ const ViewCard = ({ isOpen, card, onClose, toggleTrigger }) => {
     const [formData, setFormData] = useState({
         title: '',
         description: '',
-        category: ''
+        category: '',
+        story_points: 0
     });
     const { id } = useParams();
 
@@ -18,7 +19,8 @@ const ViewCard = ({ isOpen, card, onClose, toggleTrigger }) => {
             setFormData({
                 title: card.title || '',
                 description: card.description || '',
-                category: card.category || ''
+                category: card.category || '',
+                story_points: card.story_points || 0
             });
         }
     }, [card]);
@@ -110,6 +112,17 @@ const ViewCard = ({ isOpen, card, onClose, toggleTrigger }) => {
                             onChange={handleInputChange}
                             placeholder="Enter your description here..."
                         />
+                        <div className='modal__number'>
+                            <label htmlFor='points'>Points</label>
+                            <input
+                                name='story_points'
+                                onChange={handleInputChange} 
+                                className='modal__number-input' 
+                                id="points" 
+                                type="number" 
+                                min={0} 
+                                value={formData.story_points} />
+                        </div>
                     </form> 
                 </div>
                 <div className='modal__buttons'>

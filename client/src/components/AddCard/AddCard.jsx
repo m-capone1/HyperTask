@@ -3,7 +3,6 @@ import './AddCard.scss';
 import Modal from 'react-modal';
 import axios from'axios';
 import { useParams } from 'react-router-dom';
-import stars from '../../assets/icons/stars.png';
 
 const AddCard = ({category, toggleTrigger}) => {
     const { id } = useParams();
@@ -11,7 +10,8 @@ const AddCard = ({category, toggleTrigger}) => {
         title: "",
         description: "",
         category: category,
-        project_id: id
+        project_id: id,
+        story_points: 0
     }
 
     const [aiContent, setAiContent] = useState("");
@@ -39,9 +39,9 @@ const AddCard = ({category, toggleTrigger}) => {
     };
 
     function validateForm() {
-        const { title, description} = formData;
+        const { title, description, story_points} = formData;
 
-        if (!title || !description) {
+        if (!title || !description || !story_points) {
             alert("This field is required.")
             return false;
         }
@@ -50,6 +50,8 @@ const AddCard = ({category, toggleTrigger}) => {
     
     const handleAddCard = async(e) => {
         e.preventDefault();
+
+        formData.story_points = formData.story_points.toString();
 
         if (validateForm()){
             try {
@@ -151,6 +153,10 @@ const AddCard = ({category, toggleTrigger}) => {
                                     value={formData.description}
                                     placeholder="Enter your description here...">
                                 </textarea>
+                                <div className='modal__number'>
+                                    <label htmlFor='points'>Points</label>
+                                    <input  className='modal__number-input' id="points" type="number" min={0} />
+                                </div>
                             </form> 
                         </div>
                         <div className='modal__buttons'>

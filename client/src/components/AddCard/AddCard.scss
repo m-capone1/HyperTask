@@ -116,4 +116,23 @@
         box-shadow: 0 0 10px $tertiary-accent-color;
         cursor: pointer;
     }
+
+    &__number {
+        display: flex;
+        align-items: center;
+        margin: 1rem 0;
+        font-size: 1rem;
+    }
+
+    &__number-input {
+        font-family: 'Montserrat', sans-serif;
+        border-radius: 0.5rem;
+        border: none;
+        outline:none;
+        resize: none;
+        height: 2rem;
+        margin-left: 0.5rem;
+        width: 20%;
+        padding-left: 0.5rem;
+    }
 }

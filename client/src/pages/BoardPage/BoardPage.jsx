@@ -56,11 +56,29 @@ export default function BoardPage() {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${baseUrl}/card/cards/${id}`);
-        const responseProject = await axios.get(`${baseUrl}/project/${id}`)
+        const responseProject = await axios.get(`${baseUrl}/project/${id}`);
+
         setCards(response.data);
-        setProject(responseProject.data);
+
+        if (responseProject.data) {
+          const formatDate = (date) => {
+            if (!date) return ''; 
+            const formattedDate = new Date(date);
+            if (isNaN(formattedDate.getTime())) return '';
+            return formattedDate.toISOString().split('T')[0]; 
+          };
+
+          const formattedStartDate = formatDate(responseProject.data.start_date);
+          const formattedEndDate = formatDate(responseProject.data.end_date);
+
+          setProject({
+            ...responseProject.data,
+            start_date: formattedStartDate,
+            end_date: formattedEndDate,
+          });
+        }
       } catch (error) {
-        console.error('Error fetching card data:', error);
+        console.error("Error fetching data: ", error);
       }
     };
     fetchData();
@@ -182,11 +200,13 @@ export default function BoardPage() {
     const currentPath = window.location.pathname;
     navigate(`${currentPath}/project-details`);
   }
-
+  
   return (
     <>
       <section className='board__details'>
         <div className='board__name'>{project.name}</div>
+        <div>Start Date: {project.start_date}</div>
+        <div>Target Completion Date: {project.end_date}</div>
       </section>
       <section>
         <DndContext onDragEnd={handleDragEnd}>
