@@ -48,4 +48,23 @@ const createProject = async (req, res) => {
   }
 }
 
-export { projectsList, singleProject, createProject };
+const userProjectList = async (req,res) => {
+  try {
+    const userId = parseInt(req.params.userId, 10);
+    if (isNaN(userId)) {
+      return res.status(400).json({ message: "Invalid user ID" });
+    }
+
+    const data = await knex("project").where({ user_id: userId });
+
+    if (data.length === 0) {
+      return res.status(404).json({ message: `No projects found with ID ${projectId}` });
+    }
+
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(500).send(`Error retrieving projects data: ${err}`);
+  }
+}
+
+export { projectsList, singleProject, createProject, userProjectList };

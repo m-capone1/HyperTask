@@ -1,5 +1,7 @@
 .details {
     padding: 0 6rem;
+    display: flex;
+    flex-direction: column;
 
     &__header {
         font-size: 2rem;

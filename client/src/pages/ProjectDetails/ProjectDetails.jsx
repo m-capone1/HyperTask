@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom"
 import axios from "axios";
 import DonutChart from "../../components/DonutChart/DonutChart";
 import BarChart from "../../components/BarChart/BarChart";
+import SideNav from '../../components/SideNav/SideNav';
+import arrow from '../../assets/icons/right-arrow.png';
 import './ProjectDetails.scss';
 
 export default function ProjectDetails() {
@@ -11,6 +13,9 @@ export default function ProjectDetails() {
     const [project, setProject] = useState({});
     const [cards, setCards] = useState([]);
     const [generatedContent, setGeneratedContent] = useState({});
+    const [generatedReport, setGeneratedReport] = useState({});
+    const [generatedRecs, setRecommendations]= useState({});
+    const [navBar, setNavBar] = useState(false);
 
     const countPoints = () => {
       
@@ -67,53 +72,77 @@ export default function ProjectDetails() {
     
     useEffect(() => {
       const fetchData = async () => {
-          
         try {
           const response = await axios.get(`${baseUrl}/card/cards/${id}`);
-          const responseProject = await axios.get(`${baseUrl}/project/${id}`)
+          const responseProject = await axios.get(`${baseUrl}/project/${id}`);
           setCards(response.data);
           setProject(responseProject.data);
 
-          if (responseProject.data) {
-            const formatDate = (date) => {
-              if (!date) return ''; 
-              const formattedDate = new Date(date);
-              if (isNaN(formattedDate.getTime())) return '';
-              return formattedDate.toISOString().split('T')[0]; 
-            };
-  
-            const formattedStartDate = formatDate(responseProject.data.start_date);
-            const formattedEndDate = formatDate(responseProject.data.end_date);
-  
-            setProject({
+          const formatDate = (date) => {
+            if (!date) return ''; 
+            const formattedDate = new Date(date);
+            if (isNaN(formattedDate.getTime())) return '';
+            return formattedDate.toISOString().split('T')[0]; 
+          };
+
+          const formattedStartDate = formatDate(responseProject.data.start_date);
+          const formattedEndDate = formatDate(responseProject.data.end_date);
+
+          setProject({
               ...responseProject.data,
               start_date: formattedStartDate,
               end_date: formattedEndDate,
-            });
-          }
+          });
 
-          if(response){
-            countCards();
-          }
-
-          if (responseProject.data){
-            //add project description as well. 
-            let prompt = `generate a report and metrics summary for this project:${project.name}. I want it to be a paragraph or so long. 5-6 sentences plus the metrics.`
-            const responseAi = await axios.post(`${baseUrl}/openai/generate`,
-              {prompt}
-            );
-
-            setGeneratedContent(responseAi);
-          }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
       };
-      fetchData();
-    }, [id]);
 
-    return (
-      <section className="details">
+      fetchData();
+  }, []);
+
+
+  useEffect(() => {
+    if (cards.length > 0 && project.name) {
+      const fetchAIData = async () => {
+        try {
+          const contentPrompt = `generate a report and metrics summary for this project:${project.name} and ${project.description} with these task cards ${JSON.stringify(cards)}. Return a paragraph that is 5-6 sentences long summarizing the project.`;
+          const reportPrompt = `generate a progress report given the cards that are in each of the four categories:${JSON.stringify(cards)}, where completed means the tasks are completed and to do means the tasks are yet to be started for this project:${project.name}. Return a couple paragraphs.`;
+          const recsPrompt = `generate project recommendations to a project manager fore this project ${project} with these task cards ${cards}. Consider the start and end date of the project (remaining time) and story points remaining.`
+          const [contentResponse, reportResponse, recsResponse] = await Promise.all([
+            axios.post(`${baseUrl}/openai/generate`, { prompt: contentPrompt }),
+            axios.post(`${baseUrl}/openai/generate`, { prompt: reportPrompt }),
+            axios.post(`${baseUrl}/openai/generate`, { prompt: recsPrompt })
+          ]);
+  
+          setGeneratedContent(contentResponse);
+          setGeneratedReport(reportResponse);
+          setRecommendations(recsResponse);
+  
+        } catch (error) {
+          console.error('Error generating AI content:', error);
+        }
+      };
+  
+      fetchAIData();
+    }
+  }, [cards, project]);
+
+  const closeNav = () => {
+    setNavBar(prev => !prev);
+  }
+
+  return (
+    <section className="nav">
+      <img 
+        src={arrow} 
+        onClick={() => setNavBar(!navBar)}
+        className={`nav__arrow ${navBar ? 'nav__arrow--active' : ''}`} 
+        alt="Open Navbar" 
+      />
+      <SideNav openNav={navBar} closeNav={closeNav} />
+      <section className="details" >
         <h1 className="details__header">{project.name} Summary</h1>
         <section>
           <h2>Project Summary</h2>
@@ -125,16 +154,15 @@ export default function ProjectDetails() {
         <section>
           <BarChart countPoints={countPoints} />
         </section>
+        <section>
+          <h2>Progresss Report</h2>
+          <div>{generatedReport.data}</div>
+        </section>
+        <section>
+          <h2>Project Reccomendations</h2>
+          <div>{generatedRecs.data}</div>
+        </section>
       </section>
-    )
+    </section>
+  )
 }
-
-
-//Task Assist
-//proposal development
-//SOW development
-//gantt chart for project timelines (need project start date, due date, milestones in between)
-//budget stuff
-//resource allocation chart
-//team performance metrics
-//forcasting project timeline 

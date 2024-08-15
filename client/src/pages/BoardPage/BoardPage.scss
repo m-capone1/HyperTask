@@ -1,4 +1,19 @@
 @use '../../assets/partials/variables' as *;
+.nav {
+    display:flex;
+
+    &__arrow {
+        margin-top: 6rem;
+        max-width: 2rem;
+        max-height: 2rem;
+    }
+}
+
+.board-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
 
 .board {
     display: flex;

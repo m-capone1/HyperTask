@@ -12,4 +12,8 @@ router
     .route('/:id')
     .get(projectController.singleProject)
 
+router
+    .route('/user/:userId')
+    .get(projectController.userProjectList)
+
 export default router;

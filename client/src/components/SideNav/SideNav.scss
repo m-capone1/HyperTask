@@ -1,0 +1,57 @@
+@use '../../assets/partials/variables' as *;
+
+.navbar {
+    position: absolute;
+    top: 5rem;
+    left: 0;
+    width: 16rem;
+    height: 100%;
+    background-color: rgb(218, 191, 217);
+    z-index: 1; 
+    transform: translateX(-100%);
+    transition: transform 0.5s ease-in-out;
+    border-radius: 1rem;
+
+    &__button {
+        border: none;
+    }
+
+    &__cross {
+        width: 2rem;
+    }
+
+    &__boards {
+        display: flex;
+        flex-direction: column;
+        padding: 0 0.5rem;
+    }
+
+    &__header{
+        font-size: 1.5rem;
+        color: black;
+        padding: 1rem 0;
+    }
+
+    &__body {
+        cursor: pointer;
+        color: black;
+
+        &:hover{
+            opacity: 25%;
+        }
+    }
+}
+
+.navbar--open {
+    transform: translateX(0)
+}
+
+.navbar__close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}

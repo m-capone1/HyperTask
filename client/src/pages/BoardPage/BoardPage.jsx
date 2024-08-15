@@ -5,13 +5,13 @@ import { DndContext } from '@dnd-kit/core';
 import { Droppable } from './Droppable';
 import { Draggable } from './Draggable';
 import ViewCard from '../../components/ViewCard/ViewCard';
-import AiTaskHelper from '../AI Task Helper/AiTaskHelper';
+import SideNav from '../../components/SideNav/SideNav';
+import arrow from '../../assets/icons/right-arrow.png';
 import './BoardPage.scss';
 
 export default function BoardPage() {
   const baseUrl = 'http://localhost:8080';
   const { id } = useParams();
-  let navigate = useNavigate();
 
   const [project, setProject]= useState({});
   const [cards, setCards] = useState([]);
@@ -22,6 +22,7 @@ export default function BoardPage() {
   const [trigger, setTrigger] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
+  const [navBar, setNavBar] = useState(false);
   
   let containers = ["To Do", "In Progress", "In Review", "Completed"];
 
@@ -196,55 +197,57 @@ export default function BoardPage() {
     setSelectedCard(null);
   };
 
-  const handleNavigate = (e) => {
-    e.preventDefault;
-    const currentPath = window.location.pathname;
-    console.log(e.target.name);
-    if(e.target.name === "project-details"){
-      navigate(`${currentPath}/project-details`);
-    }
+  const openNav  = () =>{
+    setNavBar(prev => !prev);
+  }
 
-    if(e.target.name === "ai-task-helper"){
-      navigate(`${currentPath}/ai-task-helper`);
-    }
+  const closeNav = () => {
+    setNavBar(prev => !prev);
   }
   
   return (
-    <>
-      <section className='board__details'>
-        <div className='board__name'>{project.name}</div>
-        <div>Start Date: {project.start_date}</div>
-        <div>Target Completion Date: {project.end_date}</div>
-      </section>
-      <section>
-        <DndContext onDragEnd={handleDragEnd}>
-          <div className='board'>
-            {containers.map((container, index) => (
-              <Droppable key={container} id={container} toggleTrigger={toggleTrigger}>
-                <div className="board__header">{container}</div>
-                {(index === 0 ? toDo : index === 1 ? inProg : index === 2 ? inRev : completed).map((card) => (
-                  <Draggable 
-                    key={card.id} 
-                    id={card.id} 
-                    handleViewCard={handleViewCard}>
-                      {card.title}
-                  </Draggable>
-                ))}
-              </Droppable>
-            ))}
-          </div>
-        </DndContext>
-      </section>
-      {selectedCard && (
-        <ViewCard 
-          isOpen={showModal} 
-          card={selectedCard} 
-          onClose={handleCloseModal}
-          toggleTrigger={toggleTrigger}
-        />
-      )}
-      <button onClick={handleNavigate} name="project-details">Project Details</button>
-      <button onClick={handleNavigate} name="ai-task-helper">Ai Task Helper</button>
-    </>
+    <section className='nav'>
+      <img 
+        src={arrow} 
+        onClick={() => setNavBar(!navBar)}
+        className={`nav__arrow ${navBar ? 'nav__arrow--active' : ''}`} 
+        alt="Open Navbar" 
+      />
+      <SideNav openNav={navBar} closeNav={closeNav} />
+      <div className='board-container'>
+        <section className='board__details'>
+          <div className='board__name'>{project.name}</div>
+          <div>Start Date: {project.start_date}</div>
+          <div>Target Completion Date: {project.end_date}</div>
+        </section>
+        <section>
+          <DndContext onDragEnd={handleDragEnd}>
+            <div className='board'>
+              {containers.map((container, index) => (
+                <Droppable key={container} id={container} toggleTrigger={toggleTrigger}>
+                  <div className="board__header">{container}</div>
+                  {(index === 0 ? toDo : index === 1 ? inProg : index === 2 ? inRev : completed).map((card) => (
+                    <Draggable 
+                      key={card.id} 
+                      id={card.id} 
+                      handleViewCard={handleViewCard}>
+                        {card.title}
+                    </Draggable>
+                  ))}
+                </Droppable>
+              ))}
+            </div>
+          </DndContext>
+        </section>
+        {selectedCard && (
+          <ViewCard 
+            isOpen={showModal} 
+            card={selectedCard} 
+            onClose={handleCloseModal}
+            toggleTrigger={toggleTrigger}
+          />
+        )}
+      </div>
+    </section>
   );
 }
