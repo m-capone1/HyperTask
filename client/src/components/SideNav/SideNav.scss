@@ -6,13 +6,17 @@
     left: 0;
     width: 16rem;
     height: 100%;
-    background-color: rgb(218, 191, 217);
+    background-color: $card-background;
+    box-shadow: 0 0 8px white;
     z-index: 1; 
     transform: translateX(-100%);
     transition: transform 0.5s ease-in-out;
     border-radius: 1rem;
 
     &__button {
+        display: flex;
+        justify-content: flex-end;
+        margin: 1rem 1rem 0 0;
         border: none;
     }
 
@@ -28,12 +32,12 @@
 
     &__header{
         font-size: 1.5rem;
-        color: black;
-        padding: 1rem 0;
+        padding-bottom: 1rem;
     }
 
     &__name {
         font-weight: 700;
+        margin-top: 0.5rem
     }
 
     &__delete {
@@ -42,11 +46,15 @@
 
     &__body {
         cursor: pointer;
-        color: black;
+        padding: 0.25rem 0;
 
         &:hover{
             opacity: 25%;
         }
+    }
+
+    &__hr {
+        color: $tertiary-accent-color;
     }
 }
 

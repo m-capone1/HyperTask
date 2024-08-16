@@ -1,5 +1,4 @@
 import Logo from '../../assets/logo/logo-new.png'
-import MoreIcon from '../../assets/icons/more.png'
 import { useNavigate } from 'react-router-dom';
 
 export default function Header() {

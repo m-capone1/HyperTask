@@ -62,9 +62,9 @@ export default function SideNav({ openNav, closeNav }) {
 
     return (
         <div className={`navbar ${openNav ? 'navbar--open' : ''}`}>
-            <button onClick={closeNav} className="navbar__button">
+            <div onClick={closeNav} className="navbar__button">
                 <img className='navbar__cross' src={cross}></img>
-            </button>
+            </div>
             <div className='navbar__boards'>
                 <h2 className='navbar__header'>
                     Boards
@@ -75,6 +75,7 @@ export default function SideNav({ openNav, closeNav }) {
                         <h3 onClick={() => handleNavigate(board.id)} className='navbar__body navbar__name'>{board.name}</h3>
                         <div onClick={() => handleNavigate(board.id, "project-details")} className='navbar__body' name="project-details">Project Details</div>
                         <div onClick={() => handledelete(board.id)} className='navbar__body navbar__delete'>Delete Project</div>
+                        <hr className='navbar__hr'></hr>
                     </div>
                 ))}
             </div>
