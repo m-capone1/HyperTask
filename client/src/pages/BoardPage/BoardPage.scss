@@ -4,8 +4,10 @@
 
     &__arrow {
         margin-top: 6rem;
-        max-width: 2rem;
+        max-width: 2.5rem;
         max-height: 2rem;
+        padding-left: 0.5rem;
+        
     }
 }
 
@@ -13,16 +15,17 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    margin: 0 6rem;
 }
 
 .board {
     display: flex;
     flex-direction: row;
-    margin: 0 1rem;
 
     &__details {
         display: flex;
         align-items: center;
+        justify-content: space-between;
         background-color: $hero-background;
         height: 4rem;
         padding: 0;
@@ -67,5 +70,11 @@
         background-color: $background;
         margin: 1rem 0;
         border-radius: 1rem;
+    }
+
+    &__date {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
     }
 }

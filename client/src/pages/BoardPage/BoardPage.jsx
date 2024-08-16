@@ -197,10 +197,6 @@ export default function BoardPage() {
     setSelectedCard(null);
   };
 
-  const openNav  = () =>{
-    setNavBar(prev => !prev);
-  }
-
   const closeNav = () => {
     setNavBar(prev => !prev);
   }
@@ -217,8 +213,10 @@ export default function BoardPage() {
       <div className='board-container'>
         <section className='board__details'>
           <div className='board__name'>{project.name}</div>
-          <div>Start Date: {project.start_date}</div>
-          <div>Target Completion Date: {project.end_date}</div>
+          <div className='board__date'>
+            <div >Start Date: {project.start_date}</div>
+            <div>Target Completion Date: {project.end_date}</div>
+          </div>
         </section>
         <section>
           <DndContext onDragEnd={handleDragEnd}>
