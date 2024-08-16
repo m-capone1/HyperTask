@@ -32,6 +32,14 @@
         padding: 1rem 0;
     }
 
+    &__name {
+        font-weight: 700;
+    }
+
+    &__delete {
+        font-size: 0.75rem;
+    }
+
     &__body {
         cursor: pointer;
         color: black;

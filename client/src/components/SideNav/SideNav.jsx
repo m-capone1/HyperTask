@@ -38,6 +38,24 @@ export default function SideNav({ openNav, closeNav }) {
         }
     };
 
+    const handledelete = async(projectId) =>{
+        const confirmed = window.confirm("Are you sure you want to delete this project?");
+        
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+            let resposne = await axios.delete(`${baseUrl}/project/${projectId}`)
+
+            if(resposne){
+                toggleTrigger();
+            }
+        } catch(e){
+            console.log("Error deleting project", e);
+        }
+    }
+
     const toggleTrigger = () => {
         setTrigger(prev => !prev);
     };
@@ -54,8 +72,9 @@ export default function SideNav({ openNav, closeNav }) {
                 <AddBoard toggleTrigger={toggleTrigger}/>
                 {boards.map((board) => (
                     <div key={board.id}>
-                        <h3 onClick={() => handleNavigate(board.id)} className='navbar__body'>{board.name}</h3>
+                        <h3 onClick={() => handleNavigate(board.id)} className='navbar__body navbar__name'>{board.name}</h3>
                         <div onClick={() => handleNavigate(board.id, "project-details")} className='navbar__body' name="project-details">Project Details</div>
+                        <div onClick={() => handledelete(board.id)} className='navbar__body navbar__delete'>Delete Project</div>
                     </div>
                 ))}
             </div>
