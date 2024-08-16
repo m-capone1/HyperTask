@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './AddCard.scss';
+// import './AddCard.scss';
 import Modal from 'react-modal';
 import axios from'axios';
 import { useParams } from 'react-router-dom';
@@ -69,41 +69,6 @@ const AddCard = ({category, toggleTrigger}) => {
         }
     }
 
-    const validateAi =() => {
-        const { title } = formData;
-
-        if (!title) {
-            alert("This field is required.")
-            return false;
-        }
-        return true;
-    }
-
-    const handleGenerate = async(e) => {
-        e.preventDefault();
-
-        const { title } = formData;
-
-        if(validateAi()) {
-            const prompt = `Write 2-3 sentence kanban card task description based on the following title: ${title}. Enusre that only the content is provided, no headers, special characters, or seperations.`;
-
-            try { 
-                const response = await axios.post(`${baseUrl}/openai/generate`,
-                    {prompt}
-                );
-
-                let generatedContent = response.data;
-                setAiContent(generatedContent);
-                setFormData(prevState => ({
-                    ...prevState,
-                    description: generatedContent
-                }));
-
-            }catch(e){
-                console.log("Error generating card content:", e)
-            }
-        }
-    }
 
     return (
         <div>
@@ -113,7 +78,7 @@ const AddCard = ({category, toggleTrigger}) => {
                 onMouseLeave={() => setIsHovered(false)}
             >
             <div>
-                { isHovered && <button onClick={openModal} className='overlay modal-button'>+ Add a Card</button>}
+                { isHovered && <button onClick={openModal} className='overlay modal-button'>+ Add a Project</button>}
                 <Modal
                     isOpen={modalIsOpen}
                     onRequestClose={closeModal}
@@ -124,25 +89,21 @@ const AddCard = ({category, toggleTrigger}) => {
                         <div className='modal'>
                             <form className='modal__form'>
                                 <div className='modal__title-container'>
-                                    <label htmlFor='title' className='modal__title'>Title</label>
-                                    <div className='modal__title-right'>
-                                        <div className='modal__category'>Category: {category}</div>
-                                    </div>
+                                    <label htmlFor='project' className='modal__title'>Project</label>
                                 </div>
                                 <input 
-                                    id='title' 
-                                    name='title' 
+                                    id='project' 
+                                    name='project' 
                                     className='modal__input'
                                     onChange={handleInputChange}
-                                    placeholder="Enter the title of your card here...">
+                                    placeholder="Enter the title of your project here...">
                                 </input>
                             </form>
                         </div>
                         <div className='modal'>
                             <form className='modal__form'>
                                 <div className='modal__description-row'>
-                                    <label htmlFor='description' className='modal__description'>Description</label>
-                                    <button className='modal__button' onClick={handleGenerate}>AI Generate</button>         
+                                    <label htmlFor='description' className='modal__description'>Description</label>       
                                 </div>
                                 <textarea 
                                     type="text" 
@@ -154,8 +115,12 @@ const AddCard = ({category, toggleTrigger}) => {
                                     placeholder="Enter your description here...">
                                 </textarea>
                                 <div className='modal__number'>
-                                    <label htmlFor='points'>Points</label>
-                                    <input  className='modal__number-input' id="points" type="number" min={0} />
+                                    <label htmlFor='points'>Projected Start Date</label>
+                                    <input  className='modal__number-input' id="points" type="date" />
+                                </div>
+                                <div className='modal__number'>
+                                    <label htmlFor='points'>Projected Completion Date</label>
+                                    <input  className='modal__number-input' id="points" type="date" />
                                 </div>
                             </form> 
                         </div>

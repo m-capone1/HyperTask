@@ -3,11 +3,13 @@ import cross from '../../assets/icons/cross.png';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import AddBoard from '../../components/AddBoard/AddBoard'
+
 export default function SideNav({ openNav, closeNav }) {
 
     let navigate = useNavigate();
     const [boards, setBoards] = useState([]);
-    const baseUrl='http://localhost:8080'
+    const baseUrl='http://localhost:8080';
 
     //update this friday
     let userId = 1;
@@ -46,10 +48,11 @@ export default function SideNav({ openNav, closeNav }) {
                 <h2 className='navbar__header'>
                     Boards
                 </h2>
+                <AddBoard />
                 {boards.map((board) => (
                     <div key={board.id}>
                         <h3 onClick={() => handleNavigate(board.id)} className='navbar__body'>{board.name}</h3>
-                        <div  onClick={() => handleNavigate(board.id, "project-details")} className='navbar__body' name="project-details">Project Details</div>
+                        <div onClick={() => handleNavigate(board.id, "project-details")} className='navbar__body' name="project-details">Project Details</div>
                     </div>
                 ))}
             </div>
