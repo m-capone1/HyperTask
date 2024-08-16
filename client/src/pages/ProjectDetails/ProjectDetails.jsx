@@ -16,6 +16,7 @@ export default function ProjectDetails() {
     const [generatedReport, setGeneratedReport] = useState({});
     const [generatedRecs, setRecommendations]= useState({});
     const [navBar, setNavBar] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const countPoints = () => {
       
@@ -109,7 +110,7 @@ export default function ProjectDetails() {
         try {
           const contentPrompt = `generate a report and metrics summary for this project:${project.name} and ${project.description} with these task cards ${JSON.stringify(cards)}. Return a paragraph that is 5-6 sentences long summarizing the project.`;
           const reportPrompt = `generate a progress report given the cards that are in each of the four categories:${JSON.stringify(cards)}, where completed means the tasks are completed and to do means the tasks are yet to be started for this project:${project.name}. Return a couple paragraphs.`;
-          const recsPrompt = `generate project recommendations to a project manager fore this project ${project} with these task cards ${cards}. Consider the start and end date of the project (remaining time) and story points remaining.`
+          const recsPrompt = `generate project recommendations to a project manager for this project ${project} with these task cards ${cards}. Consider the start and end date of the project (remaining time) and story points remaining.`
           const [contentResponse, reportResponse, recsResponse] = await Promise.all([
             axios.post(`${baseUrl}/openai/generate`, { prompt: contentPrompt }),
             axios.post(`${baseUrl}/openai/generate`, { prompt: reportPrompt }),
@@ -119,6 +120,8 @@ export default function ProjectDetails() {
           setGeneratedContent(contentResponse);
           setGeneratedReport(reportResponse);
           setRecommendations(recsResponse);
+
+          setLoading(false);
   
         } catch (error) {
           console.error('Error generating AI content:', error);
@@ -131,6 +134,10 @@ export default function ProjectDetails() {
 
   const closeNav = () => {
     setNavBar(prev => !prev);
+  }
+
+  if (loading) {
+    return <div>Loading Content...</div>;
   }
 
   return (
