@@ -50,8 +50,9 @@ const AddCard = ({category, toggleTrigger}) => {
     
     const handleAddCard = async(e) => {
         e.preventDefault();
+        console.log(formData);
 
-        formData.story_points = formData.story_points.toString();
+        // formData.story_points = formData.story_points.toString();
 
         if (validateForm()){
             try {
@@ -154,8 +155,15 @@ const AddCard = ({category, toggleTrigger}) => {
                                     placeholder="Enter your description here...">
                                 </textarea>
                                 <div className='modal__number'>
-                                    <label htmlFor='points'>Points</label>
-                                    <input  className='modal__number-input' id="points" type="number" min={0} />
+                                    <label htmlFor='story_points'>Points</label>
+                                    <input 
+                                        className='modal__number-input' 
+                                        id="story_points"
+                                        name="story_points" 
+                                        type="number"
+                                        onChange={handleInputChange}
+                                        value={formData.story_points} 
+                                        min={0} />
                                 </div>
                             </form> 
                         </div>
