@@ -4,20 +4,21 @@ import Modal from 'react-modal';
 import axios from'axios';
 import { useParams } from 'react-router-dom';
 
-const AddCard = ({category, toggleTrigger}) => {
+const AddBoard = ({toggleTrigger}) => {
     const { id } = useParams();
+    const user_id = 1;
     const initialForm = {
-        title: "",
+        name: "",
         description: "",
-        category: category,
-        project_id: id,
-        story_points: 0
+        start_date: "",
+        end_date: "",
+        user_id: user_id
     }
 
-    const [aiContent, setAiContent] = useState("");
     const [isHovered, setIsHovered] = useState(false);
     const [formData, setFormData] = useState(initialForm);
     const [modalIsOpen, setIsOpen] = useState(false);
+    
     let baseUrl = 'http://localhost:8080';
 
     function openModal() {
@@ -27,36 +28,36 @@ const AddCard = ({category, toggleTrigger}) => {
     function closeModal() {
         setIsOpen(false);
         setIsHovered(false);
-        setAiContent("");
     }
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevState => ({
             ...prevState,
-            [name]: value
+            [name]: value,
+            user_id: user_id
         }));
     };
 
     function validateForm() {
-        const { title, description, story_points} = formData;
+        const { name, description, start_date, end_date} = formData;
 
-        if (!title || !description || !story_points) {
+        if (!name || !description || !start_date || !end_date) {
             alert("This field is required.")
             return false;
         }
         return true;
     }
     
-    const handleAddCard = async(e) => {
+    const handleAddProject = async(e) => {
         e.preventDefault();
 
-        formData.story_points = formData.story_points.toString();
+        console.log(formData);
 
         if (validateForm()){
             try {
-                const response = await axios.post(`${baseUrl}/card/cards/${id}`, formData);
-                
+                const response = await axios.post(`${baseUrl}/project`, formData);
+                console.log(response.data);
                 if(response) {
                     setFormData(initialForm);
                     toggleTrigger();
@@ -68,7 +69,6 @@ const AddCard = ({category, toggleTrigger}) => {
             }
         }
     }
-
 
     return (
         <div>
@@ -89,11 +89,11 @@ const AddCard = ({category, toggleTrigger}) => {
                         <div className='modal'>
                             <form className='modal__form'>
                                 <div className='modal__title-container'>
-                                    <label htmlFor='project' className='modal__title'>Project</label>
+                                    <label htmlFor='name' className='modal__title'>Project</label>
                                 </div>
                                 <input 
-                                    id='project' 
-                                    name='project' 
+                                    id='name' 
+                                    name='name' 
                                     className='modal__input'
                                     onChange={handleInputChange}
                                     placeholder="Enter the title of your project here...">
@@ -108,7 +108,7 @@ const AddCard = ({category, toggleTrigger}) => {
                                 <textarea 
                                     type="text" 
                                     name='description' 
-                                    id="description" 
+                                    id="description"
                                     className='modal__textarea'
                                     onChange={handleInputChange}
                                     value={formData.description}
@@ -116,16 +116,28 @@ const AddCard = ({category, toggleTrigger}) => {
                                 </textarea>
                                 <div className='modal__number'>
                                     <label htmlFor='points'>Projected Start Date</label>
-                                    <input  className='modal__number-input' id="points" type="date" />
+                                    <input 
+                                        className='modal__number-input' 
+                                        name="start_date" 
+                                        id="start_date" 
+                                        type="date"
+                                        onChange={handleInputChange}
+                                        value={formData.start_date} />
                                 </div>
                                 <div className='modal__number'>
                                     <label htmlFor='points'>Projected Completion Date</label>
-                                    <input  className='modal__number-input' id="points" type="date" />
+                                    <input 
+                                        className='modal__number-input' 
+                                        name="end_date" 
+                                        id="end_date" 
+                                        type="date"
+                                        onChange={handleInputChange}
+                                        value={formData.end_date} />
                                 </div>
                             </form> 
                         </div>
                         <div className='modal__buttons'>
-                            <button onClick={handleAddCard} className='modal__button'>+ Add Card</button>
+                            <button onClick={handleAddProject} className='modal__button'>+ Add Project</button>
                             <button onClick={closeModal} className='modal__button'>Close</button>
                         </div>
                     </div>
@@ -136,4 +148,4 @@ const AddCard = ({category, toggleTrigger}) => {
     );
 }
 
-export default AddCard;
+export default AddBoard;

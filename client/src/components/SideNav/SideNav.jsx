@@ -9,6 +9,7 @@ export default function SideNav({ openNav, closeNav }) {
 
     let navigate = useNavigate();
     const [boards, setBoards] = useState([]);
+    const [trigger, setTrigger] = useState(false);
     const baseUrl='http://localhost:8080';
 
     //update this friday
@@ -27,16 +28,18 @@ export default function SideNav({ openNav, closeNav }) {
         }
         fetchData();
 
-    }, [])
+    }, [trigger])
 
-    console.log(boards);
-    
     const handleNavigate = (boardId, subPath = '') => {
         if (subPath) {
             navigate(`/board/${boardId}/${subPath}`);
         } else {
             navigate(`/board/${boardId}`);
         }
+    };
+
+    const toggleTrigger = () => {
+        setTrigger(prev => !prev);
     };
 
     return (
@@ -48,7 +51,7 @@ export default function SideNav({ openNav, closeNav }) {
                 <h2 className='navbar__header'>
                     Boards
                 </h2>
-                <AddBoard />
+                <AddBoard toggleTrigger={toggleTrigger}/>
                 {boards.map((board) => (
                     <div key={board.id}>
                         <h3 onClick={() => handleNavigate(board.id)} className='navbar__body'>{board.name}</h3>
