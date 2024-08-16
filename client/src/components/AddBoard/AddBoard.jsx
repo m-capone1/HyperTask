@@ -2,10 +2,8 @@ import { useState } from 'react';
 // import './AddCard.scss';
 import Modal from 'react-modal';
 import axios from'axios';
-import { useParams } from 'react-router-dom';
 
 const AddBoard = ({toggleTrigger}) => {
-    const { id } = useParams();
     const user_id = 1;
     const initialForm = {
         name: "",
