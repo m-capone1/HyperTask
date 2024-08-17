@@ -5,8 +5,9 @@ import GetStartedPage from './pages/GetStartedPage/GetStartedPage'
 import BoardPage from './pages/BoardPage/BoardPage'
 import Footer from './components/Footer/Footer';
 import Header from './components/header/header';
-import AiTaskHelper from './pages/AI Task Helper/AiTaskHelper';
 import ProjectDetails from './pages/ProjectDetails/ProjectDetails';
+import Login from './pages/Login/Login';
+import Signup from './pages/Signup/Signup';
 
 function App() {
   return (
@@ -16,10 +17,10 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />}/>
           <Route path='/get-started' element={<GetStartedPage />} />
-          {/* <Route path ='/login' element={<LoginPage />} />  */}
+          <Route path ='/login' element={<Login />} />
+          <Route path ='/signup' element={<Signup />} />
           <Route path='/board/:id' element={<BoardPage />} />
           <Route path ='/board/:id/project-details' element={<ProjectDetails />} />
-          <Route path ='/board/:id/ai-task-helper' element={<AiTaskHelper />} />
         </Routes>
       </BrowserRouter>
       <Footer />

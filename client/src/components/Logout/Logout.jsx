@@ -1,0 +1,23 @@
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+export default function Logout() {
+    const navigate = useNavigate();
+    const baseUrl = 'http://localhost:8080'
+
+    const handleLogout = async () => {
+        try {
+          sessionStorage.removeItem('token');
+    
+          navigate('/login');
+        } catch (error) {
+          console.error('Error during logout:', error);
+        }
+    };
+
+    return (
+        <button onClick={handleLogout}>
+            Logout
+        </button>
+    );
+}

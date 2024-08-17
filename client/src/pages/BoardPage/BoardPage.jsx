@@ -8,12 +8,12 @@ import ViewCard from '../../components/ViewCard/ViewCard';
 import SideNav from '../../components/SideNav/SideNav';
 import arrow from '../../assets/icons/right-arrow.png';
 import './BoardPage.scss';
-
 export default function BoardPage() {
   const baseUrl = 'http://localhost:8080';
   const { id } = useParams();
+  const token = localStorage.getItem('token');
 
-  const [project, setProject]= useState({});
+  const [project, setProject] = useState({});
   const [cards, setCards] = useState([]);
   const [toDo, setToDo] = useState([]);
   const [inProg, setInProg] = useState([]);
@@ -57,8 +57,14 @@ export default function BoardPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${baseUrl}/card/cards/${id}`);
-        const responseProject = await axios.get(`${baseUrl}/project/${id}`);
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+
+        const response = await axios.get(`${baseUrl}/card/cards/${id}`, config);
+        const responseProject = await axios.get(`${baseUrl}/project/${id}`, config);
 
         setCards(response.data);
 
@@ -84,7 +90,7 @@ export default function BoardPage() {
       }
     };
     fetchData();
-  }, [id, trigger]);
+  }, [id, trigger, token]);
 
   useEffect(() => {
     sortCards(cards);
@@ -144,7 +150,6 @@ export default function BoardPage() {
     
         const updateDatabase = async() => {
           try {
-            console.log(movedCard);
             let movedCardId = movedCard.id;
             
             let cardToUpdate = {
@@ -155,7 +160,11 @@ export default function BoardPage() {
               description: movedCard.description
             }
             
-            const response = await axios.put(`${baseUrl}/card/${movedCardId}`, cardToUpdate)
+            await axios.put(`${baseUrl}/card/${movedCardId}`, cardToUpdate, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
           } catch(e) {
               console.log("Error with put request", e);
           }
