@@ -6,16 +6,19 @@ import { useParams } from 'react-router-dom';
 
 const AddCard = ({category, toggleTrigger}) => {
     const { id } = useParams();
+    let token = sessionStorage.getItem('token');
+    let userId = sessionStorage.getItem('userId');
+
     const initialForm = {
         title: "",
         description: "",
         category: category,
         project_id: id,
-        story_points: 0
+        story_points: 0,
+        user_id: userId
     }
 
     const [aiContent, setAiContent] = useState("");
-    const [isHovered, setIsHovered] = useState(false);
     const [formData, setFormData] = useState(initialForm);
     const [modalIsOpen, setIsOpen] = useState(false);
     let baseUrl = 'http://localhost:8080';
@@ -26,7 +29,6 @@ const AddCard = ({category, toggleTrigger}) => {
 
     function closeModal() {
         setIsOpen(false);
-        setIsHovered(false);
         setAiContent("");
     }
 
@@ -51,18 +53,19 @@ const AddCard = ({category, toggleTrigger}) => {
     const handleAddCard = async(e) => {
         e.preventDefault();
         console.log(formData);
-
-        // formData.story_points = formData.story_points.toString();
-
+       
         if (validateForm()){
             try {
-                const response = await axios.post(`${baseUrl}/card/cards/${id}`, formData);
+                const response = await axios.post(`${baseUrl}/card/cards/${id}`, formData, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
                 
                 if(response) {
                     setFormData(initialForm);
                     toggleTrigger();
                     setIsOpen(false);
-                    setIsHovered(false);
                 }
             } catch(e) {
                 console.log("Error adding card", e);
@@ -108,13 +111,8 @@ const AddCard = ({category, toggleTrigger}) => {
 
     return (
         <div>
-            <div
-                className="container"
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-            >
             <div>
-                { isHovered && <button onClick={openModal} className='overlay modal-button'>+ Add a Card</button>}
+                <button onClick={openModal} className='overlay modal-button'>+ Add a Card</button>
                 <Modal
                     isOpen={modalIsOpen}
                     onRequestClose={closeModal}
@@ -175,7 +173,6 @@ const AddCard = ({category, toggleTrigger}) => {
                 </Modal>
                 </div>
             </div>
-        </div>
     );
 }
 

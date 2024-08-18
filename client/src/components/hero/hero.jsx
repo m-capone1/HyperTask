@@ -11,10 +11,10 @@ export default function Hero() {
     return (
     <section className="hero">
         <div className='hero__spline-container'>
-            <Spline 
+            {/* <Spline 
                 scene="https://prod.spline.design/aVTjrKz6Pv0S3NbJ/scene.splinecode"
                 className='hero__spline-canvas-desktop'
-            /> 
+            />  */}
             <section className='hero__header'>
                 <div className='hero__main-text'>Project Management, Simplified</div>
                 <div>Streamline your projects with effortless management.</div>

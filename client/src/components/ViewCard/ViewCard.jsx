@@ -13,6 +13,7 @@ const ViewCard = ({ isOpen, card, onClose, toggleTrigger }) => {
         story_points: 0
     });
     const { id } = useParams();
+    let token = sessionStorage.getItem('token');
 
     useEffect(() => {
         if (card) {
@@ -46,7 +47,11 @@ const ViewCard = ({ isOpen, card, onClose, toggleTrigger }) => {
         console.log(updateCard);
 
         try {
-            const response = await axios.put(`${baseUrl}/card/${cardId}`, updateCard)
+            const response = await axios.put(`${baseUrl}/card/${cardId}`, updateCard, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            })
 
         }catch(e){
             console.log("Error saving card", e);
@@ -61,7 +66,11 @@ const ViewCard = ({ isOpen, card, onClose, toggleTrigger }) => {
         let cardId = card.id;
         
         try {
-            const response = await axios.delete(`${baseUrl}/card/${cardId}`)
+            const response = await axios.delete(`${baseUrl}/card/${cardId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            })
 
         }catch(e){
             console.log("Error saving card", e);
