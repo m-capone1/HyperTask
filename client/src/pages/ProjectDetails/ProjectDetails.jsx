@@ -27,6 +27,7 @@ export default function ProjectDetails() {
             Authorization: `Bearer ${token}`,
           },
         };
+
         const response = await axios.get(`${baseUrl}/card/cards/${id}`, config);
         const responseProject = await axios.get(`${baseUrl}/project/${id}`, config);
         setCards(response.data);
@@ -57,7 +58,7 @@ export default function ProjectDetails() {
   }, []);
 
   useEffect(() => {
-    if (cards.length > 0 && project.name) {
+    if (project.name) {
       const fetchAIData = async () => {
         try {
           const contentPrompt = `generate a report and metrics summary for this project:${project.name} and ${project.description} with these task cards ${JSON.stringify(cards)}. Return a paragraph that is 5-6 sentences long summarizing the project. Wrap key points with <strong> tags for bold text.`;

@@ -67,25 +67,25 @@ export default function BoardPage() {
         const response = await axios.get(`${baseUrl}/card/cards/${id}`, config);
         const responseProject = await axios.get(`${baseUrl}/project/${id}`, config);
 
-        setCards(response.data);
+          setCards(response.data);
 
-        if (responseProject.data) {
-          const formatDate = (date) => {
-            if (!date) return ''; 
-            const formattedDate = new Date(date);
-            if (isNaN(formattedDate.getTime())) return '';
-            return formattedDate.toISOString().split('T')[0]; 
-          };
-
-          const formattedStartDate = formatDate(responseProject.data.start_date);
-          const formattedEndDate = formatDate(responseProject.data.end_date);
-
-          setProject({
-            ...responseProject.data,
-            start_date: formattedStartDate,
-            end_date: formattedEndDate,
-          });
-        }
+          if (responseProject.data) {
+            const formatDate = (date) => {
+              if (!date) return ''; 
+              const formattedDate = new Date(date);
+              if (isNaN(formattedDate.getTime())) return '';
+              return formattedDate.toISOString().split('T')[0]; 
+            };
+  
+            const formattedStartDate = formatDate(responseProject.data.start_date);
+            const formattedEndDate = formatDate(responseProject.data.end_date);
+  
+            setProject({
+              ...responseProject.data,
+              start_date: formattedStartDate,
+              end_date: formattedEndDate,
+            });
+          }
       } catch (error) {
         console.error("Error fetching data: ", error);
       }

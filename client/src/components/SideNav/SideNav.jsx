@@ -26,9 +26,18 @@ export default function SideNav({ openNav, closeNav }) {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
-                setBoards(response.data);
+
+                if (response.status === 200 && response.data) {
+                    setBoards(response.data);
+                }
+
             } catch (e) {
+                if (e.response && e.response.status === 404) {
+                console.log('No projects found for this user.');
+                setBoards([]);
+            } else {
                 console.log('Error fetching data', e);
+            }
             }
         };
 
@@ -63,6 +72,10 @@ export default function SideNav({ openNav, closeNav }) {
         setTrigger(prev => !prev);
     };
 
+    const navigteToDashboard = () => {
+        navigate('/dashboard');
+    }
+
     return (
     <div className={`navbar ${openNav ? 'navbar--open' : ''}`}>
         <div onClick={closeNav} className="navbar__button">
@@ -70,6 +83,7 @@ export default function SideNav({ openNav, closeNav }) {
         </div>
         <div className='navbar__boards'>
             <h2 className='navbar__header'>Boards</h2>
+            <div onClick={navigteToDashboard}>DashBoard</div>
             <AddBoard toggleTrigger={toggleTrigger}/>
             {boards.map((board) => (
                 <div key={board.id}>

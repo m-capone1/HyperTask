@@ -6,9 +6,16 @@ export default function Header() {
     const { isLoggedIn, logout } = useAuth();
     const navigate = useNavigate();
 
+    let token = sessionStorage.getItem('token');
+
     const handleClick = (e) => {
         e.preventDefault();
-        navigate('/');
+
+        if(!token){
+            navigate('/');
+        } else {
+            navigate('/dashboard');
+        }
     };
 
     const handleLink = (e) => {

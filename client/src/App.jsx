@@ -8,7 +8,8 @@ import ProjectDetails from './pages/ProjectDetails/ProjectDetails';
 import Login from './pages/Login/Login';
 import Signup from './pages/Signup/Signup';
 import { AuthProvider } from './context/auth-context';
-
+import Dashboard
+ from './pages/Dashboard/Dashboard';
 function App() {
   return (
   <>
@@ -19,6 +20,7 @@ function App() {
         <Route path="/" element={<HomePage />}/>
         <Route path ='/login' element={<Login />} />
         <Route path ='/signup' element={<Signup />} />
+        <Route path ='/dashboard' element={<Dashboard />} />
         <Route path='/board/:id' element={<BoardPage />} />
         <Route path ='/board/:id/project-details' element={<ProjectDetails />} />
       </Routes>

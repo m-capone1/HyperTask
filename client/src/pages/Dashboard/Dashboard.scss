@@ -1,0 +1,19 @@
+@use '../../assets/partials/mixins' as *;
+
+.dashboard-page {
+    min-height: 100vh;
+}
+
+.dashboard {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    &__header {
+        font-size: 2rem;
+
+        @include desktop {
+            font-size: 3rem;;
+        }
+    }
+}

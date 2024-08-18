@@ -52,7 +52,6 @@ const AddCard = ({category, toggleTrigger}) => {
     
     const handleAddCard = async(e) => {
         e.preventDefault();
-        console.log(formData);
        
         if (validateForm()){
             try {
@@ -141,7 +140,7 @@ const AddCard = ({category, toggleTrigger}) => {
                             <form className='modal__form'>
                                 <div className='modal__description-row'>
                                     <label htmlFor='description' className='modal__description'>Description</label>
-                                    <button className='modal__button' onClick={handleGenerate}>AI Generate</button>         
+                                    <button className='modal__button modal__ai' onClick={handleGenerate}>AI Generate</button>         
                                 </div>
                                 <textarea 
                                     type="text" 

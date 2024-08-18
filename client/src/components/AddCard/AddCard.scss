@@ -1,4 +1,5 @@
 @use '../../assets/partials/variables' as *;
+@use '../../assets/partials/mixins' as *;
 
 .container {
     display: flex;
@@ -44,12 +45,16 @@
     &__title-container {
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
-        padding: 0.5rem 0;
+
+        @include tablet {
+            justify-content: space-between;
+            padding: 0.5rem 0;
+        }
     }
 
     &__title {
         font-size: 1.5rem;
+        width: 50%;
     }
 
     &__title-right {
@@ -74,7 +79,14 @@
 
     &__description-row {
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
+        margin-bottom: 1rem;
+
+        @include tablet {
+            flex-direction: row;
+            justify-content: space-between;
+            margin-bottom: 0;
+        }
     }
 
     &__textarea {
@@ -100,8 +112,11 @@
     &__buttons {
         display: flex;
         align-self: center;
-        padding: 1rem;
         gap: 1rem;
+
+        @include tablet {
+            padding: 1rem;
+        }
     }
 
     &__button {
@@ -111,10 +126,27 @@
         border-radius: 2rem;
         color: $secondary-text;
         font-weight: 600;
-        padding: 0 1rem;
         border: none;
         box-shadow: 0 0 10px $tertiary-accent-color;
         cursor: pointer;
+        width: 75%;
+
+        @include tablet {
+            padding: 0 1rem;
+            width: 10rem;
+        }
+    }
+
+    &__ai {
+        width: 30%;
+
+        @include tablet {
+            width: 25%;
+        }
+
+        @include desktop {
+            width: 20%;
+        }
     }
 
     &__number {

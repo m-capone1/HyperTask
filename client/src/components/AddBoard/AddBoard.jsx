@@ -48,9 +48,7 @@ const AddBoard = ({toggleTrigger}) => {
     
     const handleAddProject = async(e) => {
         e.preventDefault();
-
-        console.log(formData);
-
+        
         if (validateForm()){
             try {
                 const response = await axios.post(`${baseUrl}/project`, formData, {
@@ -63,7 +61,6 @@ const AddBoard = ({toggleTrigger}) => {
                     setFormData(initialForm);
                     toggleTrigger();
                     setIsOpen(false);
-                    setIsHovered(false);
                 }
             } catch(e) {
                 console.log("Error adding card", e);
@@ -111,7 +108,7 @@ const AddBoard = ({toggleTrigger}) => {
                                     placeholder="Enter your description here...">
                                 </textarea>
                                 <div className='modal__number'>
-                                    <label htmlFor='points'>Projected Start Date</label>
+                                    <label htmlFor='start_date'>Projected Start Date</label>
                                     <input 
                                         className='modal__number-input' 
                                         name="start_date" 
@@ -121,7 +118,7 @@ const AddBoard = ({toggleTrigger}) => {
                                         value={formData.start_date} />
                                 </div>
                                 <div className='modal__number'>
-                                    <label htmlFor='points'>Projected Completion Date</label>
+                                    <label htmlFor='end_date'>Projected Completion Date</label>
                                     <input 
                                         className='modal__number-input' 
                                         name="end_date" 
