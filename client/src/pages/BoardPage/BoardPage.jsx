@@ -224,8 +224,8 @@ export default function BoardPage() {
         <section className='board__details'>
           <div className='board__name'>{project.name}</div>
           <div className='board__date'>
-            <div >Start Date: {project.start_date}</div>
-            <div>Target Completion Date: {project.end_date}</div>
+            <div className='board__date-text'>Start Date: {project.start_date}</div>
+            <div className='board__date-text'>Target Completion Date: {project.end_date}</div>
           </div>
         </section>
         <section>

@@ -1,7 +1,6 @@
 import './App.scss'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import HomePage from './pages/HomePage/HomePage';
-import GetStartedPage from './pages/GetStartedPage/GetStartedPage'
 import BoardPage from './pages/BoardPage/BoardPage'
 import Footer from './components/Footer/Footer';
 import Header from './components/header/header';
@@ -18,7 +17,6 @@ function App() {
     <Header />
       <Routes>
         <Route path="/" element={<HomePage />}/>
-        <Route path='/get-started' element={<GetStartedPage />} />
         <Route path ='/login' element={<Login />} />
         <Route path ='/signup' element={<Signup />} />
         <Route path='/board/:id' element={<BoardPage />} />

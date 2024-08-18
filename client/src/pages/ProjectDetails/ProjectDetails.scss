@@ -1,7 +1,18 @@
+@use '../../assets/partials/mixins' as *;
+
 .details {
-    padding: 0 6rem;
+    padding: 0 1rem;
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
+
+    @include tablet {
+        padding: 0 3rem;
+    }
+
+    @include desktop {
+        padding: 0 6rem;
+    }
 
     &__header {
         font-size: 2rem;

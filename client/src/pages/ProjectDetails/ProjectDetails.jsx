@@ -18,6 +18,72 @@ export default function ProjectDetails() {
   const [generatedRecs, setRecommendations]= useState({});
   const [navBar, setNavBar] = useState(false);
   const [loading, setLoading] = useState(true);
+    
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const response = await axios.get(`${baseUrl}/card/cards/${id}`, config);
+        const responseProject = await axios.get(`${baseUrl}/project/${id}`, config);
+        setCards(response.data);
+        setProject(responseProject.data);
+
+        const formatDate = (date) => {
+          if (!date) return ''; 
+          const formattedDate = new Date(date);
+          if (isNaN(formattedDate.getTime())) return '';
+          return formattedDate.toISOString().split('T')[0]; 
+        };
+
+        const formattedStartDate = formatDate(responseProject.data.start_date);
+        const formattedEndDate = formatDate(responseProject.data.end_date);
+
+        setProject({
+            ...responseProject.data,
+            start_date: formattedStartDate,
+            end_date: formattedEndDate,
+        });
+
+      } catch (error) {
+          console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (cards.length > 0 && project.name) {
+      const fetchAIData = async () => {
+        try {
+          const contentPrompt = `generate a report and metrics summary for this project:${project.name} and ${project.description} with these task cards ${JSON.stringify(cards)}. Return a paragraph that is 5-6 sentences long summarizing the project. Wrap key points with <strong> tags for bold text.`;
+          const reportPrompt = `generate a progress report given the cards that are in each of the four categories:${JSON.stringify(cards)}, where completed means the tasks are completed and to do means the tasks are yet to be started for this project:${project.name}. Return a couple paragraphs. Wrap key points with <strong> tags for bold text.`;
+          const recsPrompt = `generate project recommendations to a project manager for this project ${project} with these task cards ${cards}. Consider the start and end date of the project (remaining time) and story points remaining. Wrap key points with <strong> tags for bold text.`
+          
+          const [contentResponse, reportResponse, recsResponse] = await Promise.all([
+            axios.post(`${baseUrl}/openai/generate`, { prompt: contentPrompt }),
+            axios.post(`${baseUrl}/openai/generate`, { prompt: reportPrompt }),
+            axios.post(`${baseUrl}/openai/generate`, { prompt: recsPrompt })
+          ]);
+
+          setGeneratedContent(contentResponse);
+          setGeneratedReport(reportResponse);
+          setRecommendations(recsResponse);
+
+          setLoading(false);
+  
+        } catch (error) {
+          console.error('Error generating AI content:', error);
+        }
+      };
+  
+      fetchAIData();
+    }
+  }, [cards, project]);
 
   const countPoints = () => {
     
@@ -70,71 +136,6 @@ export default function ProjectDetails() {
 
     return cardCount;
   }
-    
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const response = await axios.get(`${baseUrl}/card/cards/${id}`, config);
-        const responseProject = await axios.get(`${baseUrl}/project/${id}`, config);
-        setCards(response.data);
-        setProject(responseProject.data);
-
-        const formatDate = (date) => {
-          if (!date) return ''; 
-          const formattedDate = new Date(date);
-          if (isNaN(formattedDate.getTime())) return '';
-          return formattedDate.toISOString().split('T')[0]; 
-        };
-
-        const formattedStartDate = formatDate(responseProject.data.start_date);
-        const formattedEndDate = formatDate(responseProject.data.end_date);
-
-        setProject({
-            ...responseProject.data,
-            start_date: formattedStartDate,
-            end_date: formattedEndDate,
-        });
-
-      } catch (error) {
-          console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    if (cards.length > 0 && project.name) {
-      const fetchAIData = async () => {
-        try {
-          const contentPrompt = `generate a report and metrics summary for this project:${project.name} and ${project.description} with these task cards ${JSON.stringify(cards)}. Return a paragraph that is 5-6 sentences long summarizing the project.`;
-          const reportPrompt = `generate a progress report given the cards that are in each of the four categories:${JSON.stringify(cards)}, where completed means the tasks are completed and to do means the tasks are yet to be started for this project:${project.name}. Return a couple paragraphs.`;
-          const recsPrompt = `generate project recommendations to a project manager for this project ${project} with these task cards ${cards}. Consider the start and end date of the project (remaining time) and story points remaining.`
-          const [contentResponse, reportResponse, recsResponse] = await Promise.all([
-            axios.post(`${baseUrl}/openai/generate`, { prompt: contentPrompt }),
-            axios.post(`${baseUrl}/openai/generate`, { prompt: reportPrompt }),
-            axios.post(`${baseUrl}/openai/generate`, { prompt: recsPrompt })
-          ]);
-  
-          setGeneratedContent(contentResponse);
-          setGeneratedReport(reportResponse);
-          setRecommendations(recsResponse);
-
-          setLoading(false);
-  
-        } catch (error) {
-          console.error('Error generating AI content:', error);
-        }
-      };
-  
-      fetchAIData();
-    }
-  }, [cards, project]);
 
   const closeNav = () => {
     setNavBar(prev => !prev);
@@ -155,10 +156,7 @@ export default function ProjectDetails() {
       <SideNav openNav={navBar} closeNav={closeNav} />
       <section className="details" >
         <h1 className="details__header">{project.name} Summary</h1>
-        <section>
-          <h2>Project Summary</h2>
-          <div>{generatedContent.data}</div> 
-        </section>
+        <section dangerouslySetInnerHTML={{ __html: generatedContent.data }} />
         <section className="details__chart">
           <DonutChart countCards={countCards} />
         </section>
@@ -166,12 +164,12 @@ export default function ProjectDetails() {
           <BarChart countPoints={countPoints} />
         </section>
         <section>
-          <h2>Progress Report</h2>
-          <div>{generatedReport.data}</div>
+          <h2 className="details__header">Progress Report</h2>
+          <section dangerouslySetInnerHTML={{ __html: generatedReport.data }} />
         </section>
         <section>
-          <h2>Project Reccomendations</h2>
-          <div>{generatedRecs.data}</div>
+          <h2 className="details__header">Project Reccomendations</h2>
+          <section dangerouslySetInnerHTML={{ __html: generatedRecs.data }} />
         </section>
       </section>
     </section>

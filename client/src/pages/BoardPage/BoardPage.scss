@@ -1,6 +1,9 @@
 @use '../../assets/partials/variables' as *;
+@use '../../assets/partials/mixins' as *;
+
 .nav {
-    display:flex;
+    display: flex;
+    min-height: 100vh;
 
     &__arrow {
         margin-top: 6rem;
@@ -15,26 +18,50 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    margin: 0 6rem;
+    margin: 0 1rem;
+
+    @include tablet {
+        margin: 0 2rem;
+    }
+
+    @include desktop {
+        margin: 0 6rem;
+    }
 }
 
 .board {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+
+    @include tablet {
+        display: flex;
+        flex-direction: row;
+    }
 
     &__details {
         display: flex;
         align-items: center;
-        justify-content: space-between;
         background-color: $hero-background;
-        height: 4rem;
+        height: 6rem;
         padding: 0;
+        gap: 1rem;
+
+        @include tablet {
+            justify-content: space-between;
+            height: 4rem;
+        }
     }
 
     &__name {
-        font-size: 2rem;
+        font-size: 1.125rem;
         font-weight: 600;
-        padding: 0 1rem;
+        width: 50%;
+
+        @include tablet {
+            font-size: 2rem;
+            font-weight: 600;
+            padding: 0 1rem;
+        }
     }
 
     &__header {
@@ -43,11 +70,15 @@
         border-radius: 1rem;
         font-size: 1rem;
         font-weight: 600;
-        width: 70%;
         display: flex;
         justify-content: center;
         align-items: center;
         margin-bottom: 0.5rem;
+        width: 45%;
+
+        @include tablet {
+            width: 70%;
+        }
     }
 
     &__kanban {
@@ -75,6 +106,21 @@
     &__date {
         display: flex;
         flex-direction: column;
-        align-items: flex-end;
+        gap: 0.25rem;
+
+        @include tablet {
+            align-items: flex-end;
+        }
+    }
+
+    &__date-text {
+        font-size: 0.75rem;
+        align-self: flex-end;
+        width: 60%;
+
+        @include tablet {
+            font-size: 1rem;
+            width: 100%;
+        }
     }
 }
