@@ -36,6 +36,7 @@
     @include tablet {
         display: flex;
         flex-direction: row;
+        gap: 1rem;
     }
 
     &__details {

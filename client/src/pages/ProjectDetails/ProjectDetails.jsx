@@ -151,12 +151,12 @@ export default function ProjectDetails() {
         src={arrow} 
         onClick={() => setNavBar(!navBar)}
         className={`nav__arrow ${navBar ? 'nav__arrow--active' : ''}`} 
-        alt="Open Navbar" 
+        alt="Open-Navbar" 
       />
       <SideNav openNav={navBar} closeNav={closeNav} />
       <section className="details" >
         <h1 className="details__header">{project.name} Summary</h1>
-        <section dangerouslySetInnerHTML={{ __html: generatedContent.data }} />
+        <section className='details__body' dangerouslySetInnerHTML={{ __html: generatedContent.data }} />
         <section className="details__chart">
           <DonutChart countCards={countCards} />
         </section>
@@ -165,11 +165,11 @@ export default function ProjectDetails() {
         </section>
         <section>
           <h2 className="details__header">Progress Report</h2>
-          <section dangerouslySetInnerHTML={{ __html: generatedReport.data }} />
+          <section className='details__body' dangerouslySetInnerHTML={{ __html: generatedReport.data }} />
         </section>
         <section>
           <h2 className="details__header">Project Reccomendations</h2>
-          <section dangerouslySetInnerHTML={{ __html: generatedRecs.data }} />
+          <section className='details__body' dangerouslySetInnerHTML={{ __html: generatedRecs.data }} />
         </section>
       </section>
     </section>

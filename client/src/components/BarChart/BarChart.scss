@@ -1,3 +1,15 @@
+@use '../../assets/partials/mixins' as *;
+
+canvas {
+    width: 50% !important;
+    height: 100% !important; 
+
+    @include tablet {
+        width: 100% !important;
+        height: 100% !important; 
+    }
+}
+
 .bar-chart {
     display: flex;
     flex-direction: column;
@@ -16,10 +28,5 @@
         width: 100%;
         max-width: 44rem;
         height: 25rem; 
-    }
-
-    canvas {
-        width: 100% !important;
-        height: 100% !important; 
     }
 }
