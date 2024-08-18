@@ -1,5 +1,4 @@
 import { useState } from 'react';
-// import './AddCard.scss';
 import Modal from 'react-modal';
 import axios from'axios';
 
@@ -13,7 +12,8 @@ const AddBoard = ({toggleTrigger}) => {
         user_id: user_id
     }
 
-    const [isHovered, setIsHovered] = useState(false);
+    let token = sessionStorage.getItem('token');
+
     const [formData, setFormData] = useState(initialForm);
     const [modalIsOpen, setIsOpen] = useState(false);
     
@@ -25,7 +25,6 @@ const AddBoard = ({toggleTrigger}) => {
 
     function closeModal() {
         setIsOpen(false);
-        setIsHovered(false);
     }
 
     const handleInputChange = (e) => {
@@ -54,8 +53,12 @@ const AddBoard = ({toggleTrigger}) => {
 
         if (validateForm()){
             try {
-                const response = await axios.post(`${baseUrl}/project`, formData);
-                console.log(response.data);
+                const response = await axios.post(`${baseUrl}/project`, formData, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
+                
                 if(response) {
                     setFormData(initialForm);
                     toggleTrigger();
@@ -70,13 +73,8 @@ const AddBoard = ({toggleTrigger}) => {
 
     return (
         <div>
-            <div
-                className="container"
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-            >
             <div>
-                { isHovered && <button onClick={openModal} className='overlay modal-button'>+ Add a Project</button>}
+                <button onClick={openModal} className='overlay modal-button'>+ Add a Project</button>
                 <Modal
                     isOpen={modalIsOpen}
                     onRequestClose={closeModal}
@@ -142,7 +140,6 @@ const AddBoard = ({toggleTrigger}) => {
                 </Modal>
                 </div>
             </div>
-        </div>
     );
 }
 
