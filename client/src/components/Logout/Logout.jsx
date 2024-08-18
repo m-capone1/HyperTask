@@ -3,7 +3,6 @@ import axios from 'axios';
 
 export default function Logout() {
     const navigate = useNavigate();
-    const baseUrl = 'http://localhost:8080'
 
     const handleLogout = async () => {
         try {

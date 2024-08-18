@@ -1,13 +1,15 @@
 import "./Login.scss";
 import axios from "axios";
 import Input from "../../components/Input/Input";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from '../../context/auth-context';
 
 function Login() {
   const [error, setError] = useState(null);
+  const { login } = useAuth(); 
   const navigate = useNavigate();
-  const baseUrl = 'http://localhost:8080'
+  const baseUrl = 'http://localhost:8080';
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -18,7 +20,10 @@ function Login() {
         password: event.target.password.value,
       });
 
-      sessionStorage.setItem("token", response.data.token);
+      const token = response.data.token;
+      sessionStorage.setItem("token", token);
+
+      login(token);
 
       navigate("/board/1");
     } catch (error) {
@@ -26,20 +31,13 @@ function Login() {
     }
   };
 
-  // useEffect(() => {
-  //   const token = sessionStorage.getItem("token");
-  //   if (token) {
-  //     navigate("/board/1");
-  //   }
-  // }, [navigate]);
-
   return (
     <main className="login-page">
       <form className="login" onSubmit={handleSubmit}>
         <h1 className="login__title">Log in</h1>
 
-        <Input type="text" name="email" label="Email" />
-        <Input type="password" name="password" label="Password" />
+        <Input type="text" name="email" label="Email" autoComplete="email"/>
+        <Input type="password" name="password" label="Password" autoComplete="current-password"/>
 
         <button className="login__button">Log in</button>
 

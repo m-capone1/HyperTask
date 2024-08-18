@@ -1,35 +1,51 @@
-import Logo from '../../assets/logo/logo-new.png'
+import { useEffect } from 'react';
+import Logo from '../../assets/logo/logo-new.png';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/auth-context'; 
 
 export default function Header() {
-    
+    const { isLoggedIn, logout } = useAuth();
     const navigate = useNavigate();
-    const handleClick = (e) =>{
-        e.preventDefault();
-        navigate('/')
-    }
 
-    const handleLink = (e) =>{
+    const handleClick = (e) => {
         e.preventDefault();
-        
-        if(e.target.name === "signup") {
+        navigate('/');
+    };
+
+    const handleLink = (e) => {
+        e.preventDefault();
+
+        if (e.target.name === "signup") {
             navigate('/signup');
-        }
-        if(e.target.name === "login") {
+        } else if (e.target.name === "login") {
             navigate('/login');
         }
-    }
+    };
+
+    const handleLogout = () => {
+        logout();
+        navigate('/');
+    };
 
     return (
         <header className='header'>
-                <div className='header__main'>
-                    <img className='header__img' src={Logo} alt='logo' onClick={handleClick}></img>
-                    <span className='header__header'>HyperTask</span>
-                </div>
-                <div className='header__nav-layout'>
-                    <button onClick={handleLink} name='signup'>Signup</button>
-                    <button onClick={handleLink} name='login'>Login</button>
-                </div>
+            <div className='header__main'>
+                <img className='header__img' src={Logo} alt='logo' onClick={handleClick}></img>
+                <span className='header__header'>HyperTask</span>
+            </div>
+            <div className='header__nav-layout'>
+                {isLoggedIn ? (
+                    <>
+                        <span>Logged in</span>
+                        <button onClick={handleLogout}>Logout</button>
+                    </>
+                ) : (
+                    <>
+                        <button onClick={handleLink} name='signup'>Signup</button>
+                        <button onClick={handleLink} name='login'>Login</button>
+                    </>
+                )}
+            </div>
         </header>
     );
 }
