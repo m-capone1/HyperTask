@@ -15,7 +15,18 @@
         padding: 1rem 0;
     }
 
+    &__cards{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        @include desktop {
+            width: 80%;
+        }
+    }
+
     &__subheader {
         @extend .home-page-body__header;
     }
+
 }

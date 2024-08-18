@@ -1,22 +1,18 @@
 import './HomePageCard.scss';
-import Spline from '@splinetool/react-spline';
 
 export default function HomePageCard({cardNumber, title, description, scene}) {
     return (
-        <section className="container">
-            <div className='container__number'>
+        <section className="get-started">
+            <div className='get-started__number'>
                 {cardNumber}
             </div>
-            <h3 className='container__title'>
+            <h3 className='get-started__title'>
                 {title}
             </h3>
-            <div className='container__description'>
+            <div className='get-started__description'>
                 {description}
             </div>
-            <Spline 
-                scene={scene}
-                className=''
-            />
+            <img className='get-started__img' src={scene}></img>
         </section>
     )
 }
