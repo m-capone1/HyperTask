@@ -12,12 +12,21 @@ export default function SideNav({ openNav, closeNav }) {
     const [trigger, setTrigger] = useState(false);
     const baseUrl = 'http://localhost:8080';
 
-    const userId = 1;
+    const token = sessionStorage.getItem('token');
+    const userId = sessionStorage.getItem('userId');
 
     useEffect(() => {
         const fetchData = async () => {
+            if (!userId) {
+                console.log('User ID is not available');
+                return;
+            }
             try {
-                const response = await axios.get(`${baseUrl}/project/user/${userId}`);
+                const response = await axios.get(`${baseUrl}/project/user/${userId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
                 setBoards(response.data);
             } catch (e) {
                 console.log('Error fetching data', e);
@@ -25,7 +34,7 @@ export default function SideNav({ openNav, closeNav }) {
         };
 
         fetchData();
-    }, [trigger]);
+    }, [trigger, userId, token]);
 
     const handleNavigate = (boardId, subPath = '') => {
         const path = subPath ? `/board/${boardId}/${subPath}` : `/board/${boardId}`;
@@ -38,7 +47,11 @@ export default function SideNav({ openNav, closeNav }) {
         if (!confirmed) return;
     
         try {
-            const response = await axios.delete(`${baseUrl}/project/${projectId}`);
+            const response = await axios.delete(`${baseUrl}/project/${projectId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
             if (response) {
                 toggleTrigger();
             }

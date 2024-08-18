@@ -11,7 +11,7 @@ import './BoardPage.scss';
 export default function BoardPage() {
   const baseUrl = 'http://localhost:8080';
   const { id } = useParams();
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
 
   const [project, setProject] = useState({});
   const [cards, setCards] = useState([]);

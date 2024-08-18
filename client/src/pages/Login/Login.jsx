@@ -21,7 +21,9 @@ function Login() {
       });
 
       const token = response.data.token;
+      const userId = response.data.id;
       sessionStorage.setItem("token", token);
+      sessionStorage.setItem('userId', userId);
 
       login(token);
 
