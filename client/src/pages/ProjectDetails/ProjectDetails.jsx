@@ -9,7 +9,8 @@ import './ProjectDetails.scss';
 
 export default function ProjectDetails() {
     const { id } = useParams();
-    let baseUrl= 'http://localhost:8080'
+    let baseUrl= 'http://localhost:8080';
+    const token = sessionStorage.getItem('token');
     const [project, setProject] = useState({});
     const [cards, setCards] = useState([]);
     const [generatedContent, setGeneratedContent] = useState({});
@@ -74,8 +75,13 @@ export default function ProjectDetails() {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await axios.get(`${baseUrl}/card/cards/${id}`);
-          const responseProject = await axios.get(`${baseUrl}/project/${id}`);
+          const config = {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          };
+          const response = await axios.get(`${baseUrl}/card/cards/${id}`, config);
+          const responseProject = await axios.get(`${baseUrl}/project/${id}`, config);
           setCards(response.data);
           setProject(responseProject.data);
 
