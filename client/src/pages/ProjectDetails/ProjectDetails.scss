@@ -20,13 +20,21 @@
     }
 
     &__header {
-        font-size: 2rem;
+        font-size: 1.25rem;
         font-weight: 600;
         margin: 1rem 0;
+
+        @include tablet {
+            font-size: 2rem;
+        }
     }
 
     &__body {
         font-size: 0.75rem;
+
+        @include tablet{ 
+            font-size: 1rem;
+        }
     }
 
     &__chart {
