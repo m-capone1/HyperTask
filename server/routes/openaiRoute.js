@@ -4,7 +4,7 @@ import axios from 'axios';
 const router = express.Router();
 
 // const openaiApiKey = process.env.OPENAI_API_KEY;
-const openaiApiKey = "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"
+const openaiApiKey = "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"
 const openaiApiUrl = 'https://api.openai.com/v1/chat/completions';
 
 router.post('/generate', async (req, res) => {

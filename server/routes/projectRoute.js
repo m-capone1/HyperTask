@@ -6,11 +6,12 @@ const router = express.Router();
 router
     .route('/')
     .get(projectController.projectsList)
-    .post(projectController.createProject);
+    .post(projectController.createProject)
 
 router
     .route('/:id')
     .get(projectController.singleProject)
+    .delete(projectController.deleteProject);
 
 router
     .route('/user/:userId')

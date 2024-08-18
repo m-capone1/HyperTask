@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { DndContext } from '@dnd-kit/core';
 import { Droppable } from './Droppable';
 import { Draggable } from './Draggable';
@@ -8,6 +8,7 @@ import ViewCard from '../../components/ViewCard/ViewCard';
 import SideNav from '../../components/SideNav/SideNav';
 import arrow from '../../assets/icons/right-arrow.png';
 import './BoardPage.scss';
+
 export default function BoardPage() {
   const baseUrl = 'http://localhost:8080';
   const { id } = useParams();

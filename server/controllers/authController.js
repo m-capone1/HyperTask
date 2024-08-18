@@ -1,47 +1,61 @@
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import initKnex from "knex";
+import configuration from "../knexfile.js";
+const knex = initKnex(configuration);
 
-const users = [];
+const signup = async (req, res) => {
+  try {
+    const { first_name, last_name, email, password } = req.body;
 
-const signup = (req, res) => {
-  users.push(req.body);
-  res.json({ success: true });
-};
-
-const login = (req, res) => {
-  const { username, password } = req.body;
-  const user = users.find(u => u.username === username);
-
-  if (!!user && user.password === password) {
-    const token = jwt.sign(
-      { username: user.username, name: user.name },
-      process.env.SECRET_KEY
-    );
-    res.json({ token });
-  } else {
-    res.status(401).json({ error: { message: "Login failed" } });
-  }
-};
-
-const profile = (req, res) => {
-  res.json(req.payload);
-};
-
-const verifyToken = (req, res, next) => {
-  const { authorization } = req.headers;
-  if (!authorization) {
-    return res.status(401).json({ error: "Authorization header missing" });
-  }
-
-  const token = authorization.slice("Bearer ".length);
-
-  jwt.verify(token, process.env.SECRET_KEY, (err, payload) => {
-    if (err) {
-      return res.status(401).json({ error: "Token verification failed" });
-    } else {
-      req.payload = payload;
-      next();
+    const existingUser = await knex('user').where({ email }).first();
+    if (existingUser) {
+      return res.status(400).json('User already exists');
     }
-  });
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await knex('user').insert({
+      first_name,
+      last_name,
+      email,
+      password: hashedPassword,
+    });
+
+    res.status(201).json('User registered successfully');
+
+  } catch (e) {
+    console.log('Error registering user', e);
+    res.status(500).json('Error registering user');
+  }
 };
 
-export { signup, login, profile, verifyToken }
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await knex('user').where({ email }).first();
+    if (!user) {
+      return res.status(400).json('Invalid credentials');
+    }
+
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) {
+      return res.status(400).json('Invalid credentials');
+    }
+
+    const token = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET_KEY, { expiresIn: '24h' });
+
+    res.json({ token, id: user.id });
+
+  } catch (e) {
+    console.log('Error logging in user', e);
+    res.status(500).json('Error logging in user');
+  }
+};
+
+const logout = (req, res) => {
+  res.status(200).send('Logged out successfully');
+};
+
+export { signup, login, logout }
