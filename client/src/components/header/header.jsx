@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import Logo from '../../assets/logo/logo-new.png';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/auth-context'; 
@@ -35,15 +34,14 @@ export default function Header() {
             </div>
             <div className='header__nav-layout'>
                 {isLoggedIn ? (
-                    <>
-                        <span>Logged in</span>
-                        <button onClick={handleLogout}>Logout</button>
-                    </>
+                    <div>
+                        <button onClick={handleLogout} className='header__button'>Logout</button>
+                    </div>
                 ) : (
-                    <>
-                        <button onClick={handleLink} name='signup'>Signup</button>
-                        <button onClick={handleLink} name='login'>Login</button>
-                    </>
+                    <div className='header__buttons'>
+                        <button onClick={handleLink} name='signup' className='header__button'>Signup</button>
+                        <button onClick={handleLink} name='login' className='header__button'>Login</button>
+                    </div>
                 )}
             </div>
         </header>

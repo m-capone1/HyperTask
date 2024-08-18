@@ -1,0 +1,25 @@
+@use '../../assets/partials/variables' as *;
+
+.field {
+    display: flex;
+    flex-direction: column;
+
+    &__label {
+        margin-bottom: 0.5rem;
+        color: $background;
+    }
+
+    &__input {
+        margin-bottom: 1rem;
+        border: 1px solid $background;
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+        font-size: inherit;
+        outline: none;
+        color: $background;
+        
+        &:focus {
+            border: 1px solid $tertiary-accent-color;
+        }
+    }
+}

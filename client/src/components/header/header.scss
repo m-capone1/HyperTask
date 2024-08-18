@@ -1,3 +1,6 @@
+@use '../../assets/partials/variables' as *;
+@use '../../assets/partials/mixins' as *;
+
 .header {
     background: rgb(2,0,36);
     padding: $mobile-padding;
@@ -37,5 +40,23 @@
 
     &__more {
         width: 1.25rem;
+    }
+
+    &__buttons{
+        display: flex;
+        flex-direction: row;
+        gap:1rem;
+    }
+
+    &__button {
+        border: none;
+        background-color: $accent-color;
+        font-size: 1rem;
+        border-radius: 1rem;;
+        color: $background;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        font-family: 'Montserrat', sans-serif;
+        cursor: pointer;
     }
 }

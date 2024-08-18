@@ -8,107 +8,105 @@ import arrow from '../../assets/icons/right-arrow.png';
 import './ProjectDetails.scss';
 
 export default function ProjectDetails() {
-    const { id } = useParams();
-    let baseUrl= 'http://localhost:8080';
-    const token = sessionStorage.getItem('token');
-    const [project, setProject] = useState({});
-    const [cards, setCards] = useState([]);
-    const [generatedContent, setGeneratedContent] = useState({});
-    const [generatedReport, setGeneratedReport] = useState({});
-    const [generatedRecs, setRecommendations]= useState({});
-    const [navBar, setNavBar] = useState(false);
-    const [loading, setLoading] = useState(true);
+  const { id } = useParams();
+  let baseUrl= 'http://localhost:8080';
+  const token = sessionStorage.getItem('token');
+  const [project, setProject] = useState({});
+  const [cards, setCards] = useState([]);
+  const [generatedContent, setGeneratedContent] = useState({});
+  const [generatedReport, setGeneratedReport] = useState({});
+  const [generatedRecs, setRecommendations]= useState({});
+  const [navBar, setNavBar] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-    const countPoints = () => {
-      
-      let points = {
-        toDo: 0,
-        inProg: 0,
-        inRev: 0,
-        comp: 0
-      };
+  const countPoints = () => {
+    
+    let points = {
+      toDo: 0,
+      inProg: 0,
+      inRev: 0,
+      comp: 0
+    };
 
-      cards.forEach((card) =>{
-        if(card.category === "To Do"){
-          points.toDo += card.story_points;
-        }
-        if(card.category === "In Progress"){
-          points.inProg += card.story_points;
-        }
-        if(card.category === "In Review"){
-          points.inRev += card.story_points;
-        }
-        if(card.category === "Completed"){
-          points.comp += card.story_points;
-        }
-      })
-      return points;
-
-    }
-
-    const countCards = () => {
-      let cardCount = {
-        todo: 0,
-        inprog: 0,
-        inrev: 0,
-        comp: 0
+    cards.forEach((card) =>{
+      if(card.category === "To Do"){
+        points.toDo += card.story_points;
       }
-    
-      cards.forEach((card) => {
-        if (card.category === 'To Do'){
-          cardCount.todo = cardCount.todo + 1;
-        } 
-        if (card.category === 'In Progress'){
-          cardCount.inprog = cardCount.inprog + 1;
-        }
-        if (card.category === 'In Review'){
-          cardCount.inrev = cardCount.inrev + 1;
-        }
-        if (card.category === 'Completed'){
-          cardCount.comp = cardCount.comp + 1;
-        }
-      })
-  
-      return cardCount;
+      if(card.category === "In Progress"){
+        points.inProg += card.story_points;
+      }
+      if(card.category === "In Review"){
+        points.inRev += card.story_points;
+      }
+      if(card.category === "Completed"){
+        points.comp += card.story_points;
+      }
+    })
+    return points;
+  }
+
+  const countCards = () => {
+    let cardCount = {
+      todo: 0,
+      inprog: 0,
+      inrev: 0,
+      comp: 0
     }
+  
+    cards.forEach((card) => {
+      if (card.category === 'To Do'){
+        cardCount.todo = cardCount.todo + 1;
+      } 
+      if (card.category === 'In Progress'){
+        cardCount.inprog = cardCount.inprog + 1;
+      }
+      if (card.category === 'In Review'){
+        cardCount.inrev = cardCount.inrev + 1;
+      }
+      if (card.category === 'Completed'){
+        cardCount.comp = cardCount.comp + 1;
+      }
+    })
+
+    return cardCount;
+  }
     
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const config = {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          };
-          const response = await axios.get(`${baseUrl}/card/cards/${id}`, config);
-          const responseProject = await axios.get(`${baseUrl}/project/${id}`, config);
-          setCards(response.data);
-          setProject(responseProject.data);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const response = await axios.get(`${baseUrl}/card/cards/${id}`, config);
+        const responseProject = await axios.get(`${baseUrl}/project/${id}`, config);
+        setCards(response.data);
+        setProject(responseProject.data);
 
-          const formatDate = (date) => {
-            if (!date) return ''; 
-            const formattedDate = new Date(date);
-            if (isNaN(formattedDate.getTime())) return '';
-            return formattedDate.toISOString().split('T')[0]; 
-          };
+        const formatDate = (date) => {
+          if (!date) return ''; 
+          const formattedDate = new Date(date);
+          if (isNaN(formattedDate.getTime())) return '';
+          return formattedDate.toISOString().split('T')[0]; 
+        };
 
-          const formattedStartDate = formatDate(responseProject.data.start_date);
-          const formattedEndDate = formatDate(responseProject.data.end_date);
+        const formattedStartDate = formatDate(responseProject.data.start_date);
+        const formattedEndDate = formatDate(responseProject.data.end_date);
 
-          setProject({
-              ...responseProject.data,
-              start_date: formattedStartDate,
-              end_date: formattedEndDate,
-          });
+        setProject({
+            ...responseProject.data,
+            start_date: formattedStartDate,
+            end_date: formattedEndDate,
+        });
 
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-      };
+      } catch (error) {
+          console.error('Error fetching data:', error);
+      }
+    };
 
-      fetchData();
+    fetchData();
   }, []);
-
 
   useEffect(() => {
     if (cards.length > 0 && project.name) {
@@ -168,7 +166,7 @@ export default function ProjectDetails() {
           <BarChart countPoints={countPoints} />
         </section>
         <section>
-          <h2>Progresss Report</h2>
+          <h2>Progress Report</h2>
           <div>{generatedReport.data}</div>
         </section>
         <section>

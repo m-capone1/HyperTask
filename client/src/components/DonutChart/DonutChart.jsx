@@ -5,7 +5,7 @@ import './DonutChart.scss';
 ChartJS.register(Title, Tooltip, Legend, ArcElement);
 
 const DonutChart = ({countCards}) => {
-    let cardCount = countCards();
+  let cardCount = countCards();
 
   const data = {
     labels: ['To Do', 'In Progress', 'In Review','Completed'],
@@ -26,7 +26,7 @@ const DonutChart = ({countCards}) => {
     <div className='chart-container'>
       <h2 className='chart-container__header'>Progress Chart</h2>
       <div className='chart-container__chart'>
-            <Doughnut data={data} />
+        <Doughnut data={data} />
       </div>
     </div>
   );
