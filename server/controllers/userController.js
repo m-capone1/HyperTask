@@ -2,7 +2,6 @@ import initKnex from "knex";
 import configuration from "../knexfile.js";
 const knex = initKnex(configuration);
 
-// List project data
 const userList = async (req, res) => {
   try {
     const data = await knex("user");
