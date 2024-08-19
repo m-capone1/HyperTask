@@ -68,31 +68,34 @@ export default function BoardPage() {
         const response = await axios.get(`${baseUrl}/card/cards/${id}`, config);
         const responseProject = await axios.get(`${baseUrl}/project/${id}`, config);
 
-          setCards(response.data);
+        setCards(response.data);
 
-          if (responseProject.data) {
-            const formatDate = (date) => {
-              if (!date) return ''; 
-              const formattedDate = new Date(date);
-              if (isNaN(formattedDate.getTime())) return '';
-              return formattedDate.toISOString().split('T')[0]; 
-            };
-  
+        if (responseProject.data) {
+          const formatDate = (date) => {
+            if (!date) return ''; 
+            const formattedDate = new Date(date);
+            if (isNaN(formattedDate.getTime())) return '';
+            return formattedDate.toISOString().split('T')[0]; 
+          };
+
             const formattedStartDate = formatDate(responseProject.data.start_date);
             const formattedEndDate = formatDate(responseProject.data.end_date);
-  
+
             setProject({
               ...responseProject.data,
               start_date: formattedStartDate,
               end_date: formattedEndDate,
             });
-          }
+        }
+
+        sortCards(response.data);
+
       } catch (error) {
         console.error("Error fetching data: ", error);
       }
     };
     fetchData();
-  }, [id, trigger, token]);
+}, [id, trigger, token]);
 
   useEffect(() => {
     sortCards(cards);
@@ -110,10 +113,10 @@ export default function BoardPage() {
       if(fromContainer !== toContainer){
         if (fromContainer === "To Do") {
           setToDo(prevCards => {
-              const updatedCards = [...prevCards];
-              const index = updatedCards.findIndex(card => card.id === active.id);
-              movedCard = updatedCards.splice(index, 1)[0];
-              return updatedCards;
+            const updatedCards = [...prevCards];
+            const index = updatedCards.findIndex(card => card.id === active.id);
+            movedCard = updatedCards.splice(index, 1)[0];
+            return updatedCards;
             });
         } else if (fromContainer === "In Progress") {
           setInProg(prevCards => {
@@ -220,7 +223,7 @@ export default function BoardPage() {
         className={`nav__arrow ${navBar ? 'nav__arrow--active' : ''}`} 
         alt="Open Navbar" 
       />
-      <SideNav openNav={navBar} closeNav={closeNav} />
+      <SideNav openNav={navBar} closeNav={closeNav} toggleTrigger={toggleTrigger} />
       <div className='board-container'>
         <section className='board__details'>
           <div className='board__name'>{project.name}</div>

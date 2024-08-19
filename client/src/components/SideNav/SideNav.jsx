@@ -5,10 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import AddBoard from '../../components/AddBoard/AddBoard';
 
-export default function SideNav({ openNav, closeNav }) {
+export default function SideNav({ openNav, closeNav, toggleTrigger }) {
     const navigate = useNavigate();
     const [boards, setBoards] = useState([]);
-    const [trigger, setTrigger] = useState(false);
+    const [triggerNav, setTriggerNav] = useState(false);
     const baseUrl = import.meta.env.VITE_REACT_APP_API_URL;
 
     const token = sessionStorage.getItem('token');
@@ -26,27 +26,32 @@ export default function SideNav({ openNav, closeNav }) {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
-
+    
                 if (response.status === 200 && response.data) {
                     setBoards(response.data);
+                    if (triggerNav) {
+                        const firstAddedProject = response.data[0];
+                        handleNavigate(firstAddedProject.id);
+                    }
                 }
-
+    
             } catch (e) {
                 if (e.response && e.response.status === 404) {
-                console.log('No projects found for this user.');
-                setBoards([]);
-            } else {
-                console.log('Error fetching data', e);
-            }
+                    console.log('No projects found for this user.');
+                    setBoards([]);
+                } else {
+                    console.log('Error fetching data', e);
+                }
             }
         };
-
+    
         fetchData();
-    }, [trigger, userId, token]);
+    }, [triggerNav, userId, token]);
 
     const handleNavigate = (boardId, subPath = '') => {
         const path = subPath ? `/board/${boardId}/${subPath}` : `/board/${boardId}`;
         navigate(path);
+        window.location.reload();
     };
 
     const handleDelete = async (projectId) => {
@@ -61,15 +66,15 @@ export default function SideNav({ openNav, closeNav }) {
                 },
             });
             if (response) {
-                toggleTrigger();
+                toggleTriggerNav();
             }
         } catch (e) {
             console.log("Error deleting project", e);
         }
     };
 
-    const toggleTrigger = () => {
-        setTrigger(prev => !prev);
+    const toggleTriggerNav = () => {
+        setTriggerNav(prev => !prev);
     };
 
     const navigteToDashboard = () => {
@@ -84,7 +89,7 @@ export default function SideNav({ openNav, closeNav }) {
         <div className='navbar__boards'>
             <h2 className='navbar__header'>Boards</h2>
             <div onClick={navigteToDashboard} className='navbar__dashboard'>DashBoard</div>
-            <AddBoard toggleTrigger={toggleTrigger}/>
+            <AddBoard toggleTriggerNav={toggleTriggerNav} toggleTrigger={toggleTrigger}/>
             {boards.map((board) => (
                 <div key={board.id}>
                     <h3 onClick={() => handleNavigate(board.id)} className='navbar__body navbar__name'>{board.name}</h3>

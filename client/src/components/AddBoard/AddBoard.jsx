@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Modal from 'react-modal';
 import axios from'axios';
 
-const AddBoard = ({toggleTrigger}) => {
+const AddBoard = ({toggleTriggerNav, toggleTrigger}) => {
     
     const user_id = 1;
     const initialForm = {
@@ -49,7 +49,7 @@ const AddBoard = ({toggleTrigger}) => {
     
     const handleAddProject = async(e) => {
         e.preventDefault();
-        
+    
         if (validateForm()){
             try {
                 const response = await axios.post(`${baseUrl}/project`, formData, {
@@ -57,14 +57,16 @@ const AddBoard = ({toggleTrigger}) => {
                         Authorization: `Bearer ${token}`,
                     }
                 });
-                
+    
                 if(response) {
+                    const newProjectId = response.data.id;
                     setFormData(initialForm);
+                    toggleTriggerNav();
                     toggleTrigger();
                     setIsOpen(false);
                 }
             } catch(e) {
-                console.log("Error adding card", e);
+                console.log("Error adding project", e);
             }
         }
     }

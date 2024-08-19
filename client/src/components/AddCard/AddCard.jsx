@@ -55,17 +55,17 @@ const AddCard = ({category, toggleTrigger}) => {
        
         if (validateForm()){
             try {
-                const response = await axios.post(`${baseUrl}/card/cards/${id}`, formData, {
+                await axios.post(`${baseUrl}/card/cards/${id}`, formData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     }
                 });
-                
-                if(response) {
-                    setFormData(initialForm);
-                    toggleTrigger();
-                    setIsOpen(false);
-                }
+
+                setFormData(initialForm);
+                toggleTrigger();
+                window.location.reload();
+                setIsOpen(false);
+
             } catch(e) {
                 console.log("Error adding card", e);
             }

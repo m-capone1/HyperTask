@@ -4,9 +4,7 @@ const knex = initKnex(configuration);
 
 const singleCard = async (req, res) => {
   try {
-    const cardData = await knex("card")
-      .where({ id: req.params.id })
-      .first();
+    const cardData = await knex("card").where({ id: req.params.id }).first();
 
     if (!cardData) {
       return res.status(404).json({
@@ -55,9 +53,7 @@ const cardsByProjectId = async (req, res) => {
 
 const updateCard = async (req, res) => {
   try {
-    const rowsUpdated = await knex("card")
-      .where({ id: req.params.id}) 
-      .update(req.body);
+    const rowsUpdated = await knex("card").where({ id: req.params.id}).update(req.body);
 
     if (rowsUpdated === 0) {
       return res.status(404).json({
@@ -77,9 +73,7 @@ const updateCard = async (req, res) => {
 
 const deleteCard = async (req, res) => {
   try {
-    const result = await knex("card")
-      .where({ id: req.params.id })
-      .del();
+    const result = await knex("card").where({ id: req.params.id }).del();
 
     if (result === 0) {
       return res.status(404).json({ message: "Card not found or not accessible, so could not delete" });
