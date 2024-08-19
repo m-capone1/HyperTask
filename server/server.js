@@ -8,7 +8,6 @@ import 'dotenv/config';
 import projectRoute from './routes/projectRoute.js';
 import openaiRoute from './routes/openaiRoute.js';
 import authRoutes from './routes/authRoute.js';
-// import userRoute from './routes/userRoute.js';
 import cardRoute from './routes/cardRoute.js';
 
 const app = express();
@@ -21,7 +20,6 @@ app.use(bodyParser.json());
 app.use('/project', authenticate, projectRoute);
 app.use('/openai', openaiRoute);
 app.use('/auth', authRoutes)
-// app.use('/user', userRoute);
 app.use('/card', authenticate, cardRoute)
 
 app.listen(port, () => {

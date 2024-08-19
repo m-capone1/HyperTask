@@ -23,7 +23,7 @@ const singleCard = async (req, res) => {
 const createCard = async (req, res) => {
   const { project_id, title, description } = req.body;
   
-  if (!project_id || !title) {
+  if (!project_id || !title || !description) {
     return res.status(400).json({ message: "Please ensure that all required fields are filled out." });
   }
 
@@ -45,12 +45,7 @@ const cardsByProjectId = async (req, res) => {
       return res.status(400).json({ message: "Invalid project ID" });
     }
 
-    const data = await knex("card")
-      .where({ project_id: projectId });
-
-    if (data.length === 0) {
-      return res.status(404).json({ message: `No cards found for project ID ${projectId}` });
-    }
+    const data = await knex("card").where({ project_id: projectId });
 
     res.status(200).json(data);
   } catch (err) {
