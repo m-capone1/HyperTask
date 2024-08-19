@@ -64,9 +64,9 @@ export default function ProjectDetails() {
     if (project.name) {
       const fetchAIData = async () => {
         try {
-          const contentPrompt = `generate a report and metrics summary for this project:${project.name} and ${project.description} with these task cards ${JSON.stringify(cards)}. Return a paragraph that is 5-6 sentences long summarizing the project. Wrap key points with <strong> tags for bold text.`;
-          const reportPrompt = `generate a progress report given the cards that are in each of the four categories:${JSON.stringify(cards)}, where completed means the tasks are completed and to do means the tasks are yet to be started for this project:${project.name}. Return a couple paragraphs. Wrap key points with <strong> tags for bold text.`;
-          const recsPrompt = `generate project recommendations to a project manager for this project ${project} with these task cards ${cards}. Consider the start and end date of the project (remaining time) and story points remaining. Wrap key points with <strong> tags for bold text.`
+          const contentPrompt = `generate a report and metrics summary for this project:${project.name} and ${project.description} with these task cards ${JSON.stringify(cards)}. Return a paragraph that is 5-6 sentences long summarizing the project. Wrap key points with <strong> tags for bold text. Don't mention the card ID number.`;
+          const reportPrompt = `generate a progress report given the cards that are in each of the four categories:${JSON.stringify(cards)}, where completed means the tasks are completed and to do means the tasks are yet to be started for this project:${project.name}. Return a couple paragraphs. Wrap key points with <strong> tags for bold text.  Don't mention the card ID number.`;
+          const recsPrompt = `generate project recommendations to a project manager for this project ${project} with these task cards ${JSON.stringify(cards)}. Consider the start and end date of the project (remaining time) and story points remaining. Wrap key points with <strong> tags for bold text.  Don't mention the card ID number.`
           
           const [contentResponse, reportResponse, recsResponse] = await Promise.all([
             axios.post(`${baseUrl}/openai/generate`, { prompt: contentPrompt }),

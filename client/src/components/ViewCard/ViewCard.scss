@@ -1,5 +1,7 @@
+@use '../../assets/partials/variables'as *;
+
 .delete {
-    color: red;
-    background-color: aqua;
+    color: $background;
+    background-color: $accent-color;
     margin-right: auto;
 }
