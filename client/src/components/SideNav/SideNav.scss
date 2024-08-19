@@ -35,6 +35,12 @@
         padding-bottom: 1rem;
     }
 
+    &__dashboard {
+        font-size: 1rem;
+        padding-bottom: 0.5rem;
+        cursor: pointer;
+    }
+
     &__name {
         font-weight: 700;
         margin-top: 0.5rem

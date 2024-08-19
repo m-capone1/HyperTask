@@ -1,4 +1,5 @@
 @use '../../assets/partials/mixins' as *;
+@use '../../assets/partials/keyframes' as *;
 
 .dashboard-page {
     min-height: 100vh;
@@ -6,14 +7,29 @@
 
 .dashboard {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
 
     &__header {
         font-size: 2rem;
 
+        @include tablet {
+            font-size: 2.5rem;
+        }
+
         @include desktop {
-            font-size: 3rem;;
+            font-size: 3rem;
+        }
+    }
+
+    &__logo {
+        margin: 1rem 0;
+        width: 3rem;
+        animation: spin 5s linear infinite;
+
+        @include tablet{
+            width: 3rem;
         }
     }
 }

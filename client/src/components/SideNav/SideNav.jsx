@@ -83,7 +83,7 @@ export default function SideNav({ openNav, closeNav }) {
         </div>
         <div className='navbar__boards'>
             <h2 className='navbar__header'>Boards</h2>
-            <div onClick={navigteToDashboard}>DashBoard</div>
+            <div onClick={navigteToDashboard} className='navbar__dashboard'>DashBoard</div>
             <AddBoard toggleTrigger={toggleTrigger}/>
             {boards.map((board) => (
                 <div key={board.id}>
