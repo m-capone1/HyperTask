@@ -1,28 +1,30 @@
 import express from 'express';
-import axios from 'axios';
+import OpenAI from "openai";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const router = express.Router();
 
-// const openaiApiKey = process.env.OPENAI_API_KEY;
-const openaiApiKey = "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"
-const openaiApiUrl = 'https://api.openai.com/v1/chat/completions';
+const openaiApiKey = process.env.OPENAI_API_KEY;
+
+const openai = new OpenAI({
+  apiKey: openaiApiKey,
+});
 
 router.post('/generate', async (req, res) => {
   const prompt = JSON.stringify(req.body);
 
   try {
-    const response = await axios.post(openaiApiUrl, {
-      model: "gpt-3.5-turbo",
-      messages: [{ role: 'user', content: prompt }],
-      max_tokens: 250,
-    }, {
-      headers: {
-        'Authorization': `Bearer ${openaiApiKey}`,
-        'Content-Type': 'application/json',
-      },
+    const completion = await openai.chat.completions.create({
+      messages: [{
+        role: "user",
+        content: prompt,
+      }],
+      model: "gpt-4",
     });
 
-    res.json(response.data.choices[0].message.content);
+    res.json(completion.choices[0].message.content);
   } catch (error) {
     console.error('Error generating content:', error.response ? error.response.data : error.message);
     res.status(500).json({ error: 'Failed to generate content. Please check API key and model.' });
