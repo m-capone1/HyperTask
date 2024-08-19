@@ -9,7 +9,7 @@ function Login() {
   const [error, setError] = useState(null);
   const { login } = useAuth(); 
   const navigate = useNavigate();
-  const baseUrl = 'http://localhost:8080';
+  const baseUrl = import.meta.env.VITE_REACT_APP_API_URL;
 
   const handleSubmit = async (event) => {
     event.preventDefault();

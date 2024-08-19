@@ -5,7 +5,9 @@ import axios from "axios";
 import Input from "../../components/Input/Input";
 
 function Signup() {
-    const baseUrl = 'http://localhost:8080'
+
+    const baseUrl = import.meta.env.VITE_REACT_APP_API_URL;
+    
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
 

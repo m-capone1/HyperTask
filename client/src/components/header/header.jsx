@@ -1,6 +1,7 @@
 import Logo from '../../assets/logo/logo-new.png';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/auth-context'; 
+import './Header.scss';
 
 export default function Header() {
     const { isLoggedIn, logout } = useAuth();

@@ -10,7 +10,8 @@ import arrow from '../../assets/icons/right-arrow.png';
 import './BoardPage.scss';
 
 export default function BoardPage() {
-  const baseUrl = 'http://localhost:8080';
+
+  const baseUrl = import.meta.env.VITE_REACT_APP_API_URL;
   const { id } = useParams();
   const token = sessionStorage.getItem('token');
 

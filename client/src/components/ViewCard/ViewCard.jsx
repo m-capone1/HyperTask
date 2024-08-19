@@ -5,15 +5,17 @@ import './ViewCard.scss';
 import { useParams } from 'react-router-dom';
 
 const ViewCard = ({ isOpen, card, onClose, toggleTrigger }) => {
-    const baseUrl = 'http://localhost:8080';
+
+    const baseUrl = import.meta.env.VITE_REACT_APP_API_URL;
+    const { id } = useParams();
+    let token = sessionStorage.getItem('token');
+
     const [formData, setFormData] = useState({
         title: '',
         description: '',
         category: '',
         story_points: 0
     });
-    const { id } = useParams();
-    let token = sessionStorage.getItem('token');
 
     useEffect(() => {
         if (card) {
@@ -44,10 +46,8 @@ const ViewCard = ({ isOpen, card, onClose, toggleTrigger }) => {
             project_id: id
         }
 
-        console.log(updateCard);
-
         try {
-            const response = await axios.put(`${baseUrl}/card/${cardId}`, updateCard, {
+            await axios.put(`${baseUrl}/card/${cardId}`, updateCard, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 }
@@ -66,7 +66,7 @@ const ViewCard = ({ isOpen, card, onClose, toggleTrigger }) => {
         let cardId = card.id;
         
         try {
-            const response = await axios.delete(`${baseUrl}/card/${cardId}`, {
+            await axios.delete(`${baseUrl}/card/${cardId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 }

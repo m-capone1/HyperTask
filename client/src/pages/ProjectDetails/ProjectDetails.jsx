@@ -5,12 +5,15 @@ import DonutChart from "../../components/DonutChart/DonutChart";
 import BarChart from "../../components/BarChart/BarChart";
 import SideNav from '../../components/SideNav/SideNav';
 import arrow from '../../assets/icons/right-arrow.png';
+import logo from '../../assets/logo/logo-new.png';
 import './ProjectDetails.scss';
 
 export default function ProjectDetails() {
+  
   const { id } = useParams();
-  let baseUrl= 'http://localhost:8080';
+  const baseUrl = import.meta.env.VITE_REACT_APP_API_URL;
   const token = sessionStorage.getItem('token');
+  
   const [project, setProject] = useState({});
   const [cards, setCards] = useState([]);
   const [generatedContent, setGeneratedContent] = useState({});
@@ -143,8 +146,12 @@ export default function ProjectDetails() {
   }
 
   if (loading) {
-    return <div>Loading Content...</div>;
-  }
+    return (
+      <section className="loading">
+        <div className="loading__text">Loading Content...</div>
+        <img src={logo} alt="logo-loader" className="loading__logo"></img>
+      </section>
+  )}
 
   return (
     <section className="nav">

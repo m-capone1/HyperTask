@@ -9,7 +9,7 @@ export default function SideNav({ openNav, closeNav }) {
     const navigate = useNavigate();
     const [boards, setBoards] = useState([]);
     const [trigger, setTrigger] = useState(false);
-    const baseUrl = 'http://localhost:8080';
+    const baseUrl = import.meta.env.VITE_REACT_APP_API_URL;
 
     const token = sessionStorage.getItem('token');
     const userId = sessionStorage.getItem('userId');

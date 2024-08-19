@@ -3,6 +3,7 @@ import Modal from 'react-modal';
 import axios from'axios';
 
 const AddBoard = ({toggleTrigger}) => {
+    
     const user_id = 1;
     const initialForm = {
         name: "",
@@ -17,7 +18,7 @@ const AddBoard = ({toggleTrigger}) => {
     const [formData, setFormData] = useState(initialForm);
     const [modalIsOpen, setIsOpen] = useState(false);
     
-    let baseUrl = 'http://localhost:8080';
+    let baseUrl = import.meta.env.VITE_REACT_APP_API_URL;
 
     function openModal() {
         setIsOpen(true);

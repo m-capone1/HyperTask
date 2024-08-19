@@ -8,6 +8,7 @@ const AddCard = ({category, toggleTrigger}) => {
     const { id } = useParams();
     let token = sessionStorage.getItem('token');
     let userId = sessionStorage.getItem('userId');
+    let baseUrl = import.meta.env.VITE_REACT_APP_API_URL;
 
     const initialForm = {
         title: "",
@@ -21,7 +22,6 @@ const AddCard = ({category, toggleTrigger}) => {
     const [aiContent, setAiContent] = useState("");
     const [formData, setFormData] = useState(initialForm);
     const [modalIsOpen, setIsOpen] = useState(false);
-    let baseUrl = 'http://localhost:8080';
 
     function openModal() {
         setIsOpen(true);
