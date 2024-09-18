@@ -1,6 +1,6 @@
 import Spline from '@splinetool/react-spline';
 import { useNavigate} from 'react-router-dom';
-import './Hero.scss';
+import './NewHero.scss';
 
 export default function Hero() {
     const navigate = useNavigate();
