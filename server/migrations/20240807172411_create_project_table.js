@@ -26,6 +26,10 @@ export function up(knex) {
       table.enu("category", ["To Do", "In Progress", "In Review", "Completed"]).notNullable();
       table.integer("project_id").unsigned().notNullable();
       table.foreign("project_id").references("id").inTable("project").onDelete("CASCADE");
+      
+      table.integer("user_id").unsigned().notNullable();
+      table.foreign("user_id").references("id").inTable("user").onDelete("CASCADE");
+
       table.timestamp("created_at").defaultTo(knex.fn.now());
       table.timestamp("updated_at").defaultTo(knex.raw("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"));
     });
