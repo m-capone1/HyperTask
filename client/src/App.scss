@@ -2,8 +2,8 @@
 @use './assets/partials/mixins' as *;
 @import './assets/partials/typography';
 
-@import './components/header/header.scss';
-@import './components/hero/hero.scss';
+@import './components/NewHeader/NewHeader.scss';
+@import './components/NewHero/NewHero.scss';
 
 * 
 {
