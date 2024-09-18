@@ -21,7 +21,7 @@ router.post('/generate', async (req, res) => {
         role: "user",
         content: prompt,
       }],
-      model: "gpt-4",
+      model: "gpt-3.5-turbo",
     });
 
     res.json(completion.choices[0].message.content);
